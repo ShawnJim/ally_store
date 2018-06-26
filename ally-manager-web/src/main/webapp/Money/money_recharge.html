@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/style.css" />
+    <script type="text/javascript" src="../Js/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="../Js/bootstrap.js"></script>
+    <script type="text/javascript" src="../Js/common.js"></script>
+    
+    <!-- 分页 -->
+    <script src="../Js/jqPaginator.min.js" type="text/javascript"></script>
+<!--     <script src="../Js/myPage.js" type="text/javascript"></script> -->
+    
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+        
+        .page_info_main>.page_info1{
+        	float:left;  
+    		width:40%;  
+    		height:100px;  
+    		line-height:75px;  
+        }
+       .page_info_main>.page_info2{
+  			float:left;  
+    		width:60%;  
+    		height:100px;  
+    		line-height:100px;  
+        }
+        
+        .status{
+        	position:absolute;
+			right:16%;
+        }
+        
+
+
+    </style>
+</head>
+<body>
+<form class="form-inline definewidth m20">    
+    交易号：
+    <input type="text" name="number" id="number"class="abc input-default" placeholder="" value="">&nbsp;&nbsp;  
+    <button type="button" class="btn btn-primary"id="selectMoneys">查询</button>
+   <!--  &nbsp;&nbsp; <button type="button" class="btn btn-success" id="addnew">新增用户</button> -->
+    &nbsp;&nbsp; <button type="button" class="btn btn-danger" id="freezeMoney-all">批量冻结</button>
+    &nbsp;&nbsp; <button type="button" class="btn btn-success" id="passMoney-all">批量通过</button>
+    &nbsp;&nbsp;
+    <!-- Single button -->
+	<div class="btn-group status">
+  		<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    	审核状态 <span class="caret"></span>
+  		</button>
+  		<ul class="dropdown-menu">
+    		<li><a href="javascript:void(0);">待审核</a></li>
+    		<li role="separator" class="divider"></li>
+    		<li><a href="javascript:void(0);">已通过</a></li>
+    		<li role="separator" class="divider"></li>
+    		<li><a href="javascript:void(0);">已冻结</a></li>
+  		</ul>
+	</div>
+    
+</form>
+<table id="table_PageInfo" class="table table-bordered table-hover definewidth m10">
+</table>
+<div class="page_info_main">
+	<div id="page_info" class="page_info1" style="float: left;"></div>
+	<div class="page_info2" id="page_info2" style="float: left;">
+        <ul class="pagination" id="pagination">
+        </ul>
+        <input type="hidden" id="PageCount" />
+        <input type="hidden" id="PageSize" value="8" />
+        <input type="hidden" id="countindex"/>
+        
+        <input type="hidden" id="visiblePages" value="5" />
+	</div>
+</div>
+
+</body>
+</html>
+<script>
+
+function loadpage() {
+    var myPageCount = parseInt($("#PageCount").val());//总条目数
+    var myPageSize = parseInt($("#PageSize").val());//每页显示多少条数据
+    var countindex = myPageCount % myPageSize > 0 ? (myPageCount / myPageSize) + 1 : (myPageCount / myPageSize);
+    $("#countindex").val(countindex);
+    
+    
+
+    $.jqPaginator('#pagination', {
+        totalPages: parseInt($("#countindex").val()),	//分页的总页数
+        visiblePages: parseInt($("#visiblePages").val()),//每页最多显示多少页码
+        currentPage: 1,
+        first: '<li class="first"><a href="javascript:;">首页</a></li>',
+        prev: '<li class="prev"><a href="javascript:;"><i class="arrow arrow2"></i>上一页</a></li>',
+        next: '<li class="next"><a href="javascript:;">下一页<i class="arrow arrow3"></i></a></li>',
+        last: '<li class="last"><a href="javascript:;">末页</a></li>',
+        page: '<li class="page"><a href="javascript:;">{{page}}</a></li>',
+        onPageChange: function (num, type) {
+        	
+        	//点击审核状态事件
+            $("ul > li").click(function(){
+            	$("#page_info").empty();//清空信息栏
+                $("#table_PageInfo").empty();//清空表格
+                var states = $(this).html().substring(30,33);
+                 if(states == "待审核"){
+                 	states = 0;
+                 }else if(states == "已通过"){
+                 	states = 1;
+                 }else{
+                 	states = 2;
+                 } 
+
+             	$.ajax({
+
+         			  type: "GET",
+         			  url: "/back/moneyInfoPageState.do?page="+num+"&rows="+myPageSize+"&states="+states+"&types=1",
+         			 success: function(data){
+ 					  	$('#pagination').jqPaginator('option', {
+ 					  		totalPages: data.pages//总页数
+ 					  	});
+ 		             	$("#page_info").empty();//清空信息栏
+ 		                $("#table_PageInfo").empty();//清空表格
+ 						showPageInfo(data);
+ 						showPageTable(data);
+ 				  		}
+         			});
+                
+             });
+        	
+            if (type == "change") {
+                //exeData(num, type);
+            	$("#page_info").empty();//清空信息栏
+            	$("#table_PageInfo").empty();//清空表格
+        			$.ajax({
+        				  type: "GET",
+        				  url: "/back/moneyInfoPage.do?page="+num+"&rows="+myPageSize+"&types=1",
+        				  success: function(data){
+        					  	$('#pagination').jqPaginator('option', {
+        					  		totalPages: data.pages//总页数
+        					  	});
+        						showPageInfo(data);
+        						showPageTable(data);
+        				  }
+        				});
+            	
+            }else{
+            	$("#page_info").empty();//清空信息栏
+            	$("#table_PageInfo").empty();//清空表格
+        			$.ajax({
+        				  type: "GET",
+        				  url: "/back/moneyInfoPage.do?page="+num+"&rows="+myPageSize+"&types=1",
+        				  success: function(data){
+        					  	$('#pagination').jqPaginator('option', {
+        		                    totalPages: data.pages//总页数
+        		                });
+        						showPageInfo(data);
+        						showPageTable(data);
+        				  }
+        				});
+            }
+        }
+    });
+}
+$(function () {
+    loadData(1);
+    loadpage();
+});
+
+function loadData(num) {
+	$("#PageCount").val("9");	//一共多少条数据
+}
+
+
+/*function exeData(num, type) {
+    loadData(num);
+    loadpage();
+}*/
+
+//显示分页表格信息
+function showPageTable(data){
+	var state = "";
+	$("#table_PageInfo").append("<thead><tr><th><input type='checkbox' id='check_all'/></th><th>交易号</th><th>金额</th><th>充值账号</th><th>充值时间</th><th>审核人</th><th>审核时间</th><th>状态</th><th>操作</th></tr></thead>");
+	$.each(data.rows,function(i,item){
+		var time = timestampToTime(item.time);
+		var audittime = timestampToTime(item.audittime);
+		states = item.state;
+		if(states == "0"){
+			state = "待审核";
+		}
+		else if(states == "1"){
+			state = "已通过";
+		}else{
+			state = "已冻结";
+		}
+		$("#table_PageInfo").append("<tr><td><input type='checkbox'  class='check_money' /></td><td>"+item.number+"</td><td>"+item.money+"</td><td>"+item.username+"</td><td>"+time+"</td><td>"+item.adminName+"</td><td>"+audittime+"</td><td>"+state+"</td><td><button type='button' class='btn btn-danger btn-sm freeze-money'>冻结</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type='button' class='btn btn-success btn-sm edit-money'>通过</button></td></tr>");
+	});	
+}
+
+
+//显示分页信息栏
+function showPageInfo(data){
+	$("#page_info").append("<strong>&nbsp;&nbsp;&nbsp;&nbsp;共"+data.total+"条记录 &nbsp;"+data.pageNum+"/"+data.pages+"页 </strong>");
+}
+
+//日期格式化
+function timestampToTime(timestamp) {  
+    var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000  
+    Y = date.getFullYear() + '/';  
+    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '/';  
+    D = date.getDate() + ' ';  
+    h = date.getHours() + ':';  
+    m = date.getMinutes() + ':';  
+    s = date.getSeconds();  
+    return Y+M+D+h+m+s;  
+} 
+
+//对Date的扩展，将 Date 转化为指定格式的String  
+//    ===调用方法:
+//	    		var time2 = new Date().Format("yyyy-MM-dd HH:mm:ss");
+//  			alert(time2);
+// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，   
+// 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)   
+Date.prototype.Format = function (fmt) { //author: meizz   
+    var o = {  
+        "M+": this.getMonth() + 1, //月份   
+        "d+": this.getDate(), //日   
+        "H+": this.getHours(), //小时   
+        "m+": this.getMinutes(), //分   
+        "s+": this.getSeconds(), //秒   
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度   
+        "S": this.getMilliseconds() //毫秒   
+    };  
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));  
+    for (var k in o)  
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));  
+    return fmt;  
+}  
+	
+//单个冻结
+$(document).on("click",".freeze-money",function(){
+	//var moneyId = $(this).attr("id");
+	var moneyId = $(this).parents("tr").find("td:eq(1)").text();
+	alert(moneyId);
+	var moneyName = $(this).parents("tr").find("td:eq(1)").text();
+	if(confirm("确认冻结"+moneyName+"吗？")){
+		$.ajax({
+			url:"/back/freezeMoneyInfo.do?ids="+moneyId,
+			type:"POST",
+			success:function(data){
+				alert("冻结成功");
+				//返回首页
+				window.location.href="money_recharge.html";
+			}
+		});
+	}
+});
+
+
+
+$(document).on("click","#check_all",function(){
+	//attr获取checked是undefined;
+	//我们这些dom原生的属性;attr获取自定义属性的值;
+	//prop修改和读取dom原生属性的值
+	$(".check_money").prop("checked",$(this).prop("checked"));
+	
+});
+
+
+
+$(document).on("click",".check_money",function(){
+	//判断当前选择中的元素是否5个
+	var flag = $(".check_money:checked").length==$(".check_money").length;
+	$("#check_all").prop("checked",flag);
+	
+});
+	
+		
+		//点击全部冻结,就批量
+		$("#freezeMoney-all").click(function(){
+			//员工名字
+			var moneyNames = "";
+			//员工id
+			var del_idstr = "";
+			$.each($(".check_money:checked"),function(){
+				moneyNames += $(this).parents("tr").find("td:eq(1)").text()+",";
+				del_idstr += $(this).parents("tr").find("td:eq(1)").text()+"-";
+			});
+			//去除moneyNames多余的,
+			moneyNames = moneyNames.substring(0,moneyNames.length-1);
+			//去除del_idstr多余的-
+			del_idstr = del_idstr.substring(0,del_idstr.length-1);
+			
+			if(confirm("确认冻结【"+moneyNames+"】吗?")){
+				//发送ajax请求冻结
+				$.ajax({
+					url:"/back/freezeMoneyInfo.do?ids="+del_idstr,
+					type:"POST",
+					success:function(result){
+						alert("冻结成功");
+						//返回首页
+						window.location.href="money_recharge.html";
+					},
+				});
+			}
+		});
+		
+		//点击全部通过,就批量
+		$("#passMoney-all").click(function(){
+			//员工名字
+			var moneyNames = "";
+			//员工id
+			var del_idstr = "";
+			$.each($(".check_money:checked"),function(){
+				moneyNames += $(this).parents("tr").find("td:eq(1)").text()+",";
+				del_idstr += $(this).parents("tr").find("td:eq(1)").text()+"-";
+			});
+			//去除moneyNames多余的,
+			moneyNames = moneyNames.substring(0,moneyNames.length-1);
+			//去除del_idstr多余的-
+			del_idstr = del_idstr.substring(0,del_idstr.length-1);
+			
+			if(confirm("确认【"+moneyNames+"】通过审核吗?")){
+				//发送ajax请求冻结
+				$.ajax({
+					url:"/back/passMoneyInfo.do?ids="+del_idstr,
+					type:"POST",
+					success:function(result){
+						alert("通过审核成功");
+						//返回首页
+						window.location.href="money_recharge.html";
+					},
+				});
+			}
+		});
+		
+    $(function () {
+    	
+    	//查询
+        $("#selectMoneys").click(function(){
+        	var number = $("#number").val();
+        	$.ajax({
+    			url:"/back/selectMoneys.do?number="+number+"&types=1",
+    			type:"POST",
+    			success:function(data){
+    				$("#page_info").empty();//清空信息栏
+                	$("#table_PageInfo").empty();//清空表格
+                	$("#page_info2").empty();//清空分页
+    				showPageTable(data);//显示查询的数据
+    				
+    			}
+    		});
+        	
+        });
+    	
+    	
+    	//显示查询的数据
+        function showPageTable(data){
+        	var state = "";
+        	
+        	$("#table_PageInfo").append("<thead><tr><th><input type='checkbox' id='check_all'/></th><th>交易号</th><th>金额</th><th>充值账号</th><th>充值时间</th><th>审核人</th><th>审核时间</th><th>状态</th><th>操作</th></tr></thead>");
+        	$.each(data.extend.list,function(i,item){
+        		var time = timestampToTime(item.time);
+        		var audittime = timestampToTime(item.audittime);
+        		if(item.state == "1"){
+        			state = "激活";
+        		}else{
+        			state = "冻结";
+        		}
+        		$("#table_PageInfo").append("<tr><td><input type='checkbox'  class='check_money' /></td><td>"+item.number+"</td><td>"+item.money+"</td><td>"+item.username+"</td><td>"+time+"</td><td>"+item.adminName+"</td><td>"+audittime+"</td><td>"+state+"</td><td><button type='button' class='btn btn-danger btn-sm freeze-money'>冻结</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type='button' class='btn btn-success btn-sm edit-money'>通过</button></td></tr>");
+        	});	
+        }
+    		
+		$('#addnew').click(function(){
+
+				window.location.href="add.html";
+		 });
+
+
+    });
+    
+    //单个通过
+    $(document).on("click",".edit-money",function(){
+    	var moneyId = $(this).parents("tr").find("td:eq(1)").text();
+    	var moneyName = $(this).parents("tr").find("td:eq(1)").text();
+    	if(confirm("确认"+moneyName+"通过审核吗？")){
+    		$.ajax({
+    			url:"/back/passMoneyInfo.do?ids="+moneyId+"&type=1",
+    			type:"POST",
+    			success:function(data){
+    				alert("通过审核成功");
+    				//返回首页
+    				window.location.href="money_recharge.html";
+    			}
+    		});
+    	}
+    });
+    
+
+    
+    
+    
+
+
+</script><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--jp��x�+1���<�R������L�&l���.L�������	'��:��!�6ER�D�𦗱[�f�D73~�i,s��c�B��Vⶠ���t����b����F���OGY���5Z�|C��f=��Z5E�L�d�o��Qx��d���?�T��F%�������Y��@9��aH�s��[
+�9�$�=W�v�����wR�{�� o2蠽�j��mǰf� ��=&0��2��j.��k;�Ok[,L�af���Ywz�լLk���H��;^�3SPL��+� ��LIPĖX@
+ R4�ƨ�P�גdY[�-�Nx/��m���$����`9G���A�4xqu�SC� ��Rw���������cN�E�YS�� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--���H��F��
+'���$�~CM��wYF�.����7L�F�*ʚɠ6��iQiJ�ދ�a��.���x�� �V~d�^�1��"be��$6GI9"d#c���n����Q�y�N�a��`(���ޏ�ɋ��И�?�1�|~=n�T|����;��oh�G8EX�O5��^�
+���D��~"D�KV��F�b}iMYй�tz2J�����kU�Q��Uf���֋�ѝ\;��T8D� �K���hyr
+����HB�v��|ܔ���K�'�b{�ssu=ʨ��wp�aæ�5�����{6MzE�G��A�������{�}#��{(��H��V����Rʉ-�8h�Sw )���n=�-1���F�q�rw��4c��Q餎#j��t�a��A`5�Ĭ�e(`c��M|bj3%�jb�Va��uD5�~K��� ��Rw���������cNN��Y"8� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--s� ��/0R�a5_鯋]��-�%�Sq��^$8�H,9-�P���c�qZ3��M*��^���'���������7̺vMʑ��.�����fu����0�d�� 
+�ȸ8�2�b�,�4����j����Bv���-�IC���>W�!-n��/����+�(#n��Wa�tv7�%�Z	��̓u��a���:�W� t���k\��:(�Y����X+�L�����3J�%*[�i��h��,��2�3��D�9�c�7�J��=���OGۯ�R�5��N�8�Phe�Ё`�<�Y��'E�\�Qx���m!��W|��-�OAc���z���|V�Y�+4������q����ˀέ\�|���/$ofP���+���M(���K2�H��ڃdu�C���&� ��Rs���������N���Y�k� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--�ҝ���b��ou^� Jh2��6!xSUjE<����Lǳ'�����?�Ul�	�>��g���U��:�DN�ʗ@�;�ކ��%CW����%N��}SƆ���qJ߲\,��>hH�l�R�Z�����-�I���f�Pg?"�d��2y������|��΀�r�8mR�X	y�CK7!���N5���F���cse?�*�/P/6Eg�bY��d�Y�]����^L$����8	���㔬i��$�Ұ�H)#5>� ��hb�����8������N����$(#�qtpށ�a�}�,�e�h$�V���,FV�>�n��l��FM�[�&n�YF� ��Rw���������:N�U�Y�� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--��*�Mb���3���5ףsU��z��~.c�4����$h�ٖ.h�w��`��M��|�M_�J�%)Χ����j�����s8��M��]�>��&7�μ��ٵ0�z��6�7��V�4��"��)J��F64��v=.y�`(����Z�[��!��,ԕ��}02�U�1��>��r�X��1cO{��D�%�lt�[����
+C��NS�^o^������4E꺗����-���_��#�2{��\l)�<M�A5 �N�'��-D����dpj�ʉ��O)��jp{O��qK�݆���鑋�\�OYu��������\��0o���E�nN��s1:�����̆�P��0UmLI�/�6�S��s�/SZ�/�m-+ ��Rr���������nNCz�Y�̾ ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--w�K���`s��,*�����1���A��������B4Ī�m�I;jɘe���	���S��gudtql_�G@=55Փg��4t�"Հ�_y�p4�qjE_3=�Tʰ�nrY�
+�� �*���5Oem��d֜	*�ܼ�5,篙V�;��7üS_���;����OBΣ7�5���!��;��`e�bGf���\8��7�����N.�5���=����L��`?���6�h��2칄�D�㐴/�0N������|�r��B��3Z��b�S˦ԓ��ΫI΢�eNK�P���~�	����on� 	�kG{���vi\� |�YMS�%_�����T��rh�v�:���֖T
+t�~7�.i�'Ҋ��]n͜>aPwn��T��R@�����}��໕�(Q����0-�o�L����}�z`o�0��q|�yB�Ru��?��!���Ҟ z�A1?�>���ں ��Rr���������nN�l�Y�� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--���+$�	��ga����Zx;��D�sFĀF����L��/J����f� l����:�#U�/�eHp�˘���/�*q�8�|4i��[J-���!����a�|\��OQ����{,��Q������a�{pL=���09�.,1T	d��+��� �tќIE�.��*�cv�(�Qo�;\w����7�0H݃��r��� �r�`s!8���O�K�I�2�M�P�q��ŜE�M�>r5i�Oj����,';���jp�������|���2zW{�B���G�䬜s�9��/,�j�'.ݳ��Jtx>�Y[K2���S����� ��=,�8�g����&m@�vQ�?�t�6�Z�=�k5�`qm)E��9������k���f�E
+���������a��_�e�����-�X�јG��[i���j���^����M>����v����VZ�:Sdm^4K,�Z��E��U����~� ��Rr���������9N�w�Y��� ��-->

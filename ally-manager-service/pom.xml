@@ -13,8 +13,7 @@
             <groupId>com.ally</groupId>
     		<artifactId>ally-manager-mapper</artifactId>
     		<version>0.0.1-SNAPSHOT</version>  
-        </dependency>
-        
+        </dependency> 
         <!-- Spring -->
 			<dependency>
 				<groupId>org.springframework</groupId>

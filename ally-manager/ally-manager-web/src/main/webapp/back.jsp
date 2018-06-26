@@ -15,6 +15,7 @@
 
     <div class="dl-title">
         <!--<img src="/chinapost/Public/assets/img/top.png">-->
+        	阿里路亚后台管理
     </div>
 
     <div class="dl-log">欢迎您，<span class="dl-log-user">${username}</span><a href="/back/loginout.do" title="退出系统" class="dl-log-quit">[退出]</a>
@@ -25,7 +26,7 @@
         <div class="dl-inform"><div class="dl-inform-title"><s class="dl-inform-icon dl-up"></s></div></div>
         <ul id="J_Nav"  class="nav-list ks-clear">
             <li class="nav-item dl-selected"><div class="nav-item-inner nav-home">用户管理</div></li>
-            <li class="nav-item dl-selected"><div class="nav-item-inner nav-home">权限管理</div></li>
+            <!-- <li class="nav-item dl-selected"><div class="nav-item-inner nav-home">权限管理</div></li> -->
             <li class="nav-item dl-selected"><div class="nav-item-inner nav-home">商品管理</div></li>
             <li class="nav-item dl-selected"><div class="nav-item-inner nav-home">仓库管理</div></li>
             <li class="nav-item dl-selected"><div class="nav-item-inner nav-home">订单管理</div></li>
@@ -49,50 +50,56 @@
 <script>
 BUI.use('common/main',function(){
         var config = [
-           {id:'1',menu:[
+           {
+        	   homePage:'page.html',
+        	   id:'1',menu:[
         	   {text:'品牌商管理',items:[
-        		{id:'userback_pps',text:'品牌管理',href:'User/index.html'},
-        		{id:'userback_qy',text:'企业管理',href:'User/index.html'}]},
+        		{id:'userback_pps',text:'品牌管理',href:'Brand/pp.html'},
+        		{id:'userback_qy',text:'企业管理',href:'Brand/qy.html'}]},
         	   {text:'分销商管理',items:[
-            		{id:'userback_dz',text:'店主管理',href:'User/index.html'},
-            		{id:'userback_pt',text:'平台管理',href:'User/index.html'}]},
+            		{id:'userback_dz',text:'店主管理',href:'Store/dz.html'},
+            		{id:'userback_pt',text:'平台管理',href:'Store/pt.html'}]},
         	   {text:'管理员管理',items:[
             		{id:'userback_pt',text:'管理员',href:'Admin/index.html'}]},
                {text:'用户入驻审核',items:[
-                	{id:'userback_dz',text:'品牌商入驻审核',href:'User/index.html'},
-                	{id:'userback_pt',text:'分销商入驻审核',href:'User/index.html'}]}
+                	{id:'userback_dz',text:'品牌商入驻审核',href:'Check/pp_check.html'},
+                	{id:'userback_pt',text:'分销商入驻审核',href:'Check/dz_check.html'}]}
         		]},
             		
             		
-           {id:'2',menu:[{text:'权限管理',items:[{id:'auth_j',text:'用户角色管理',href:'Back/index.html'}]}]},
-         
+           /* {id:'2',menu:[{text:'权限管理',items:[{id:'auth_j',text:'用户角色管理',href:'Back/index.html'}]}]}, */
            {id:'3',menu:[
         	   {text:'产品管理',items:[
-        	   		{id:'shop_f',text:'分类管理',href:'Back/index.html'},
-        	  		{id:'shop_c',text:'产品管理',href:'Back/index.html'}]},
+        	   		{id:'shop_f',text:'分类管理',href:'Shop/category.html'},
+        	  		{id:'shop_c',text:'产品管理',href:'Shop/product.html'}]},
         	   {text:'产品信息',items:[
-            	   	{id:'shop_f',text:'图片管理',href:'Back/index.html'},
-            	  	{id:'shop_c',text:'评论管理',href:'Back/index.html'},
-            	  	{id:'shop_f',text:'属性管理',href:'Back/index.html'},
-            	  	{id:'shop_c',text:'属值管理',href:'Back/index.html'}]},
+            	   	{id:'shop_f',text:'图片管理',href:'Shop/imager.html'},
+            	  	{id:'shop_c',text:'评论管理',href:'Shop/index.html'}/* ,
+            	  	{id:'shop_f',text:'属性管理',href:'Shop/index.html'},
+            	  	{id:'shop_c',text:'属值管理',href:'Shop/index.html'} */]},
             	   	
            ]},
         	   
         	{id:'4',menu:[{text:'仓库管理',items:[
-            	   {id:'shop_f',text:'国家管理',href:'Back/index.html'},
-            	   {id:'shop_c',text:'产品管理',href:'Back/index.html'}
+            	   {id:'shop_f',text:'国家管理',href:'Warehouse/country.html'},
+            	   {id:'shop_c',text:'仓库管理',href:'Warehouse/warehouse.html'}
             	   ]}]},
             	   
             {id:'5',menu:[{text:'订单管理',items:[
                 	{id:'shop_f',text:'订单管理',href:'Back/index.html'}
                 	]}]},
                 
-            {id:'6',menu:[{text:'钱包管理',items:[
-                    {id:'shop_f',text:'钱包管理',href:'Back/index.html'}
-                  	]}]},
-                  	
+            {id:'6',menu:[
+            	{text:'钱包审核',items:[
+                    {id:'shop_f',text:'充值审核',href:'Money/money_recharge.html'},
+                    {id:'shop_f',text:'提现审核',href:'Money/money_withdraw.html'}]},
+            	{text:'用户钱包',items:[
+                    {id:'shop_f',text:'钱包明细',href:'Money/money_detail.html'}]}
+                    ]},
+                       	
+               
             {id:'7',menu:[{text:'个人资料',items:[
-                    {id:'shop_f',text:'个人资料',href:'Back/index.html'}
+                    {id:'shop_f',text:'个人资料',href:'User/info.html'}
                     ]}]},
         
         ];

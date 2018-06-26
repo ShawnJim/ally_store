@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ally.manager.mapper.my.MyTBrandPpCheckMapper" >
+  <!-- 查询品牌商 品牌审核信息分页 -->
+  <select id="selectMyBrandPpCheck" resultType="com.ally.manager.pojo.my.MyTBrandPpCheck">
+    SELECT 
+		u.id,
+		u.userName,
+		u.password,
+		u.phone,
+		u.email,
+		u.compellation,
+		u.register_time registerTime,
+		u.update_time updateTime,
+		u.state
+	FROM
+		t_user u
+	WHERE u.roleId = 2
+  </select>
+  
+  <!-- 查询品牌商 品牌审核信息分页-状态 -->
+  <select id="selectMyBrandPpCheckState" resultType="com.ally.manager.pojo.my.MyTBrandPpCheck">
+    SELECT 
+		u.id,
+		u.userName,
+		u.password,
+		u.phone,
+		u.email,
+		u.compellation,
+		u.register_time registerTime,
+		u.update_time updateTime,
+		u.state
+	FROM
+		t_user u
+	WHERE u.roleId = 2 AND u.state = #{state} 
+  </select>
+  
+  <!-- 根据用户名查询品牌商-品牌审核信息 -->
+  <select id="selectMyBrandPpCheckUserName" parameterType="string" resultType="com.ally.manager.pojo.my.MyTBrandPpCheck">
+	SELECT 
+		u.id,
+		u.userName,
+		u.password,
+		u.phone,
+		u.email,
+		u.compellation,
+		u.register_time registerTime,
+		u.update_time updateTime,
+		u.state
+	FROM
+		t_user u
+	WHERE u.roleId = 2 AND u.userName =#{username}
+  </select>
+  
+  <!-- 单个冻结品牌商信息 -->
+  <update id="freezeByPrimaryKey" parameterType="java.lang.Integer">
+  	UPDATE t_user u 
+	SET 
+		u.state = 2
+	WHERE u.roleId = 2 AND u.id = #{id}
+  </update>
+  <!-- 批量冻结品牌商信息 -->
+  <update id="freezeBatchMyBrandPp"  parameterType="java.util.List">
+  	UPDATE t_user u 
+	SET 
+		u.state = 2
+	WHERE u.roleId = 2 AND u.id in
+	<foreach collection="list" item="ids" open="(" separator="," close=")">
+		#{ids}
+	</foreach>
+  </update>
+  
+  <!-- 单个通过品牌商信息 -->
+    <update id="passByPrimaryKey" parameterType="java.lang.Integer">
+  	UPDATE t_user u 
+	SET 
+		u.state = 1
+	WHERE u.roleId = 2 AND u.id = #{id}
+  </update>
+  <!-- 批量通过品牌商信息 -->
+  <update id="passBatchMyBrandPp"  parameterType="java.util.List">
+  	UPDATE t_user u 
+	SET 
+		u.state = 1
+	WHERE u.roleId = 2 AND u.id in
+	<foreach collection="list" item="ids" open="(" separator="," close=")">
+		#{ids}
+	</foreach>
+  </update>
+  
+  
+ 
+  
+</mapper>

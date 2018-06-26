@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/style.css" />
+    <script type="text/javascript" src="../Js/jquery.js"></script>
+    <script type="text/javascript" src="../Js/bootstrap.js"></script>
+<!--     <script type="text/javascript" src="../Js/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="../Js/messages_zh.min.js"></script> -->
+    <script type="text/javascript" src="../Js/common.js"></script>
+
+ 
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+<form method="post" class="definewidth m20">
+<table class="table table-bordered table-hover definewidth m10">
+	<!-- <tr>
+        <td width="10%" class="tableleft">äº§å“ç¼–å·</td>
+        <td><input type="text" name="name" id ="name" />&nbsp;&nbsp;<span id="check_username"><span></td>
+        
+    </tr> -->
+    <tr>
+        <td width="10%" class="tableleft">äº§å“åç§°</td>
+        <td><input type="text" name="productName" id ="productName" />&nbsp;&nbsp;<span id="check_username"><span></td>
+        
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">å»ºè®®ä»·æ ¼</td>
+        <td><input type="text" name="recommendPrice" id ="recommendPrice" />&nbsp;&nbsp;<span id="check_username"><span></td>
+        
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">æ‰€å±åˆ†ç±»</td>
+        <td><input type="text" name="categoryName" id ="categoryName" />&nbsp;&nbsp;<span id="check_username"><span></td>
+        
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">æ‰€å±å“ç‰Œå•†</td>
+        <td><input type="text" name="username" id ="username" />&nbsp;&nbsp;<span id="check_username"><span></td>
+        
+    </tr>
+    <tr>
+        <td class="tableleft"></td>
+        <td>
+            <button class="btn btn-primary" type="button" id="save">ä¿å­˜</button> &nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">è¿”å›åˆ—è¡¨</button>
+        </td>
+    </tr>
+</table>
+</form>
+</body>
+</html>
+<script>
+    $(function () {
+    	
+    	//éªŒè¯ç”¨æˆ·åæ˜¯å¦ä¸ºç©º
+    	$("#username").blur(function(){
+    		var username = this.value;
+    		if(username == null || username == ""){  
+                $("#check_username").text("è¯·è¾“å…¥ç”¨æˆ·å");  
+                $("#check_username").css("color","red");  
+            } else{ 
+            	$("#check_username").text("");
+            	checkUsername();//éªŒè¯ç”¨æˆ·åæ˜¯å¦å­˜åœ¨
+            	checkUser()//éªŒè¯ç”¨æˆ·åæ ¼å¼
+            }
+    		
+    	});
+    	
+    	//éªŒè¯é‚®ç®±æ˜¯å¦ä¸ºç©º
+    	$("#email").blur(function(){
+    		var email = this.value;
+    		if(email == null || email == ""){  
+                $("#check_email").text("è¯·è¾“å…¥é‚®ç®±");  
+                $("#check_email").css("color","red");  
+            } else{ 
+            	$("#check_email").text("");
+            	checkEmail();//éªŒè¯é‚®ç®±æ ¼å¼
+            }
+    		
+    	});
+    	
+    	//éªŒè¯å¯†ç æ˜¯å¦ä¸ºç©º
+    	$("#password").blur(function(){
+    		var email = this.value;
+    		if(email == null || email == ""){  
+                $("#check_password").text("è¯·è¾“å…¥å¯†ç ");  
+                $("#check_password").css("color","red");  
+            } else{ 
+            	$("#check_password").text("");
+            	checkPass();//éªŒè¯å¯†ç æ ¼å¼
+            }
+    		
+    	});
+    	
+    	//éªŒè¯å§“åæ˜¯å¦ä¸ºç©º
+    	$("#name").blur(function(){
+    		var email = this.value;
+    		if(email == null || email == ""){  
+                $("#check_name").text("è¯·è¾“å…¥å§“å");  
+                $("#check_name").css("color","red");  
+            } else{ 
+            	$("#check_name").text("");
+            	checkName();//éªŒè¯å¯†ç æ ¼å¼
+            }
+    		
+    	});
+    	
+    	
+    	
+    	
+    	
+		$("#save").click(function(){
+				/* var registerTime = new Date().Format("yyyy-MM-dd HH:mm:ss");
+				alert(registerTime); */
+			
+				if($("#check_username").text()!="" || $("#check_password").text()!="" || $("#check_email").text()!="" || $("#check_name").text()!=""){
+					alert("æœªèƒ½æ­£ç¡®å¡«å†™ä¿¡æ¯,è¯·ä¿®æ”¹åæäº¤!");
+				}
+				else if(checkFrom()==false){
+					alert("è¯·å¡«å†™å®Œæ•´!");
+				}else{
+				/* alert($("form").serialize()); */
+				$.ajax({
+  				  type: "POST",
+  				  data:$("form").serialize(),
+  				  dataType:"json",
+  				  url: "/back/insertCategory.do",
+  				  success: function(data){
+  					  	alert("æ·»åŠ åˆ†ç±»æˆåŠŸ!");
+  					  //setTimeout("window.location.href='index.html'",5000);
+  					  window.location.href="category.html";
+  				  }
+  				});
+				}
+		 });
+		
+		
+		//éªŒè¯è¡¨å•
+		function checkFrom(){
+			if($("#password").val() == "" || $("#name").val() == "" || $("#email").val() == ""){
+				return false;
+			} 
+			return true;
+		}
+		
+		//éªŒè¯ç”¨æˆ·åæ˜¯å¦é‡å¤
+		function checkUsername(){
+			$.ajax({
+				  type: "POST",
+				  data:$("form").serialize(),
+				  dataType:"json",
+				  url: "/back/checkInsertAdmin.do",
+				  success: function(data){
+					  if(data.code == 200){
+						  $("#check_username").html("è´¦å·å·²å­˜åœ¨,è¯·é‡æ–°è¾“å…¥");
+						  $("#check_username").css("color","red");
+					  }
+				  }
+				});
+		}
+		
+		//éªŒè¯ç”¨æˆ·åæ ¼å¼
+		function checkUser(){
+			var username = $("#username").val();
+			var reg = "^[a-zA-Z]{1}([a-zA-Z0-9]|[._]){3,15}$";
+			if(!username.match(reg)){
+				 $("#check_username").html("ç”¨æˆ·åæ ¼å¼é”™è¯¯,è¯·é‡æ–°è¾“å…¥");
+				 $("#check_username").css("color","red");
+			}
+		}
+		
+		//éªŒè¯é‚®ç®±æ ¼å¼
+		function checkEmail(){
+			var email = $("#email").val();
+			var reg = "^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$";
+			if(!email.match(reg)){
+				 $("#check_email").html("é‚®ç®±æ ¼å¼é”™è¯¯,è¯·é‡æ–°è¾“å…¥");
+				 $("#check_email").css("color","red");
+			}
+			
+		}
+		
+		//éªŒè¯å¯†ç æ ¼å¼
+		function checkPass(){
+			var pass = $("#password").val();
+			var reg = "^[a-zA-Z]{1}([a-zA-Z0-9]|[._]){5,15}$";
+			if(!pass.match(reg)){
+				 $("#check_password").html("å¯†ç æ ¼å¼é”™è¯¯,è¯·é‡æ–°è¾“å…¥");
+				 $("#check_password").css("color","red");
+			}
+		}
+		
+		//éªŒè¯å§“å
+		function checkName(){
+			var name =$("#name").val();
+			var reg = "[a-zA-Z]{1,20}|[\u4e00-\u9fa5]{1,10}";
+			if(!name.match(reg)){
+				 $("#check_name").html("å§“åæ ¼å¼é”™è¯¯,è¯·é‡æ–°è¾“å…¥");
+				 $("#check_name").css("color","red");
+			}
+			
+		}
+		
+		$("#backid").click(function(){
+			window.location.href="product.html";
+		});
+		
+		
+		
+		
+		
+    });
+    
+    Date.prototype.Format = function (fmt) { //author: meizz   
+	    var o = {  
+	        "M+": this.getMonth() + 1, //æœˆä»½   
+	        "d+": this.getDate(), //æ—¥   
+	        "H+": this.getHours(), //å°æ—¶   
+	        "m+": this.getMinutes(), //åˆ†   
+	        "s+": this.getSeconds(), //ç§’   
+	        "q+": Math.floor((this.getMonth() + 3) / 3), //å­£åº¦   
+	        "S": this.getMilliseconds() //æ¯«ç§’   
+	    };  
+	    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));  
+	    for (var k in o)  
+	    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));  
+	    return fmt;  
+	}
+    
+    
+</script><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--ï¿½ï¿½)ï¿½Mbï¿½lBï¿½Mï¿½ï¿½ï¿½#ï¿½+ï¿½ï¿½ï¿½tCï¿½Sï¿½ï¿½cç‘°ï¿½ï¿½Cï¿½ï¿½ï¿½Arï¿½Rï¿½Ã¥ï¿½zLï¿½9*ï¿½ï¿½ï¿½ï¿½AÓš!ï¿½oCİNg`ï¿½ï¿½ï¿½Sï¿½}ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½x>ï¿½ï¿½ï¿½Åšï¿½dï¿½ï¿½[WZqï¿½)4AGÇŠ{ï¿½ï¿½ï¿½\`ï¿½ï¿½ï¿½!Ü—ï¿½Dmï¿½<ï¿½ï¿½ï¿½#q]P@ï¿½ï¿½ï¿½ï¿½ï¿½'ï¿½=ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½#ï¿½p ZTï¿½ï¿½ÎÉ·ï¿½ï¿½]zï¿½C(ï¿½ßŸï¿½ï¿½ï¿½Ojwï¿½iï¿½ pÑ¤0ï¿½ï¿½m$ï¿½ï¿½qa1hjtï¿½ï¿½ï¿½/ï¿½bï¿½ï¿½i1ï¿½|cXï¿½ï¿½ï¿½nï¿½&ï¿½ï¿½ï¿½Kï¿½ï¿½ï¿½Fï¿½_H_sôˆœšï¿½	 ï¿½ï¿½1ï¿½ï¿½*{Ò˜ï¿½ï¿½ï¿½ï¿½Bï¿½mï¿½{ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½%ï¿½ï¿½ï¿½<	ï¿½ï¿½ï¿½Fï¿½I	ï¥¬2@[`ï¿½ï¿½AXï¿½ï¿½MPï¿½ï¿½Zï¿½hï¿½dJï¿½:KZï¿½udï¿½ï¿½/ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½wV,ï¿½ï¿½ï¿½ï¿½5ï¿½ï¿½2ï¿½ï¿½Mï¿½ï¿½R\ï¿½]ï¿½ï¿½Ñ»ï¿½<ï¿½mZï¿½lï¿½ï¿½5ï¿½sï¿½2}Cï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½9ï¿½=6è³¯ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½\ï¿½8ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½*ï¿½/pï¿½ï¿½ï¿½,ï¿½Yfï¿½ï¿½Lï¿½ï¿½ï¿½NKï¿½JQ+ß’ÓŸï¿½$r ï¿½ï¿½Ryï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?Nï¿½ï¿½ï¿½Yï¿½ï¿½ ï¿½ï¿½--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--W$NJï¿½ï¿½ï¿½8ï¿½ï¿½ŞjvDï¿½Ã¡ï¿½E!ï¿½ï¿½ï¿½Ô“Î¦ï¿½K3ï¿½ ï¿½kï¿½	ï¿½wjï¿½:'PTï¿½eï¿½rgï¿½ï¿½ï¿½ï¿½Wï¿½exï¿½f<ï¿½ï¿½ï¿½ï¿½	0hï¿½3g7 ï¿½8@tï¿½H	ï¿½Jï¿½mï¿½ï¿½pï¿½ JK"ï¿½j3ï¿½:ï¿½v&ï¿½/èŸ—sï¿½3ï¿½2iï¿½ï¿½gG<#ï¿½ï¿½jï¿½iï¿½Aï¿½_×ï¿½ï¿½ï¿½CE*ï¿½ï¿½+ï¿½ï¿½>$%ï¿½ ~ï¿½^9h<ï¿½ï¿½ï¿½ï¿½.ï¿½ï¿½fï¿½Cï¿½ï¿½Ç½ï¿½lpï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Oï¿½Í»xï¿½ï¿½ï¿½ï¿½I-6w)fw<ï¿½ï¿½sï¿½Mï¿½FB"ï¿½ï¿½-hï¿½ï¿½.ï¿½"gVbï¿½ï¿½#ï¿½ï¿½ï¿½k+ï¿½Â„ï¿½ï¿½Öƒ7q5ï¿½
+ï¿½ï¿½qï¿½ï¿½afï¿½ ï¿½ï¿½[ï¿½?ï¿½ï¿½.Pï¿½ï¿½N&kVï¿½ï¿½lSï¿½I;ï¿½!ï¿½ï¿½ï¿½3ï¿½É­^wï¿½ï¿½ç„»ï¿½ï¿½ :ï¿½ï¿½z<ï¿½!×´ï¿½ _ï¿½y%8>^ï¿½ï¿½ï¿½jï¿½5ï¿½aUCbï¿½ßï¿½ï¿½YNrhkï¿½qRï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ ï¿½Sï¿½ï¿½ï¿½nrQg9ï¿½ï¿½İ¾&ï¿½ï¿½m&ï¿½ï¿½f_jï¿½+ï¿½iï¿½ ï¿½ï¿½Ryï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?Nf)ï¿½Yï¿½ï¿½ ï¿½ï¿½--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--RJWï¿½?sï¿½ï¿½0ï¿½ï¿½ï¿½Ñ’ï¿½ï¿½y%F{ï¿½/ß¦Twï¿½]ZZï¿½`0ï¿½ï¿½%ï¿½Dï¿½ï¿½s7$gU% ï¿½jsï¿½=Fï¿½ï¿½P'nï¿½ï¿½+>ï¿½avkqx#nï¿½}ï¿½ï¿½ï¿½*6ï¿½ï¿½?eãˆ®ï¿½ï¿½siï¿½ï¿½Íšï¿½î„¡kï¿½ÄŠ?,Nï¿½$;ï¿½>A+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½<>ï¿½XE7ï¿½rï¿½ï¿½ï¿½ï¿½ï¿½.~ï¿½ï¿½ï¿½,ï¿½ï¿½tï¿½ï¿½]/@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½9Õ¨z48ï¿½ï¿½Ieï¿½=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!ï¿½dï¿½ï¿½ï¿½&ï¿½Ú¯ï¿½ï¿½ï¿½ï¿½ï¿½;ï¿½w ï¿½Vï¿½b}lï¿½Hï¿½ï¿½~ï¿½6ï¿½ï¿½:_$ï¿½Qï¿½Gï¿½{	zlï¿½]ï¿½qï¿½8Ò ï¿½eï¿½ï¿½ï¿½Ãƒ{"r-Yï¿½|dï¿½ï¿½ï¿½ï¿½ï¿½è xï¿½ï¿½Ò­*ï¿½ï¿½ï¿½dï¿½ï¿½ï¿½/ï¿½Qï¿½2ï¿½ï¿½&ï¿½ï¿½ï¿½"ï¿½Mwï¿½ï¿½\ï¿½ï¿½ï¿½wï¿½İ˜ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½S'ï¿½gï¿½:hï¿½lÜ¿};ï¿½HOPï¿½\y	ï¿½ï¿½ ï¿½ï¿½Rvï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,Nï¿½ï¿½ï¿½Y5wï¿½ ï¿½ï¿½--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--ï¿½ï¿½DIï¿½;ï¿½Dï¿½ï¿½R@7ï¿½cy`Oï¿½ï¿½ï¿½R3É¢Î”dï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Qï¿½Qï¿½Ï°JÙŒUï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½<;n+Wï¿½dï¿½ï¿½ï¿½! rï¿½sï¿½*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½ï¿½ï¿½Fï¿½ï¿½ï¿½ï¿½ï¿½pTy
+ï¿½Ô”Iï¿½oï¿½ï¿½$ï¿½ï¿½ï¿½Rï¿½%ï¿½eï¿½ï¿½Fï¿½#ï¿½ï¿½ï¿½ï¿½Qï¿½Yï¿½ï¿½1ï¿½kï¿½Ó•{Uï¿½eSï¿½ï¿½ï¿½ï¿½T;ï¿½ï¿½ï¿½ï¿½kï¿½3ï¿½hï¿½ï¿½ï¿½ï¿½kDï¿½ï¿½ï¿½#Dï¿½ï¿½=Ú‰ï¿½7gG=ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½/áŠ9ï¿½yï¿½ï¿½i LD0ï¿½ï¿½Qï¿½ï¿½9 ï¿½Rï¿½ï¿½ï¿½O6Cï¿½:ï¿½]ï¿½6Ü”ï¿½"
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½T|ï¿½ï¿½ï¿½ï¿½` ï¿½/ï¿½ZHï¿½ï¿½Waï¿½ï¿½×¶YL2ï¿½`ï¿½ï¿½ï¿½_ï¿½ =ï¿½9Iï¿½ï¿½ï¿½Bï¿½c	ï¿½ï¿½?ï¿½ï¿½Bï¿½ï¿½oï¿½ ï¿½{+Z@]ï¿½ï¿½ï¿½ï¿½& ßï¿½ï¿½ï¿½ï¿½+,WYï¿½}
+ï¿½ï¿½Uï¿½ï¿½MWï¿½X>ï¿½aqIW!Åšï¿½ï¿½q~ï¿½"">%gï¿½ï¿½7ï¿½ï¿½ï¿½W&yï¿½ï¿½ï¿½ï¿½dIï¿½ï¿½ï¿½ï¿½ï¿½)Gï¿½^tC!LZï¿½ï¿½ï¿½Eï¿½Bï¿½ï¿½Gï¿½ ï¿½ï¿½Ryï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Nc	ï¿½Y=ï¿½ï¿½ ï¿½ï¿½--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--$ï¿½?jï¿½ï¿½ï¿½iï¿½çª’*Ú”ï¿½Zï¿½mï¿½ï¿½ï¿½ho.ï¿½ï¿½mï¿½}Bï¿½ï¿½-{ï¿½nï¿½Wï¿½ï¿½,Wï¿½Û«ï¿½'~ï¿½T{ï¿½ï¿½|8ï¿½ï¿½ï¿½}Ğ§ï¿½xï¿½7rFï¿½ï¿½ï¿½%zÚ›Sï¿½ï¿½Ü›Nï¿½Úï¿½ï¿½{ï¿½ï¿½ï¿½Wï¿½ï¿½Õ«ï¿½+ï¿½tï¿½ï¿½~ï¿½0ï¿½ï¿½Cï¿½)ï¿½	mï¿½I"CFï¿½ï¿½|ï¿½ï¿½ï¿½9ï¿½ï¿½mï¿½cï¿½iï¿½ï¿½O~Kï¿½5ï¿½ï¿½2ï¿½}Wï¿½ï¿½ï¿½_ï¿½_ptï¿½s-ï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½^/^ï¿½ ï¿½ï¿½qï¿½ÍƒRWï¿½V"ï¿½	ï¿½`ï¿½3cï¿½Nï¿½~;3ï¿½5ï¿½ï¿½ï¿½ï¿½0JÕ’:ï¿½LJï¿½48Æ°|B2ï¿½ï¿½4Ë„sï¿½ï¿½nÂ•ï¿½Yï¿½ï¿½ï¿½Uï¿½tï¿½ï¿½Eï¿½6
+ï¿½pï¿½ï¿½h*^d=`ï¿½FZï¿½ï¿½& Zï¿½F#ï¿½ï¿½ï¿½8)ï¿½ï¿½ï¿½\ï¿½Hï¿½ï¿½ï¿½<ï¿½Í›ï¿½ï¿½ï¿½ï¿½avï¿½jï¿½ï¿½ï¿½XOï¿½zï¿½-ï¿½ï¿½ï¿½Ojï¿½ï¿½!ï¿½vË“b{Tï¿½ï¿½Dï¿½ï¿½,ï¿½%ï¿½|ï¿½ï¿½Jï¿½oÒ¥ï¿½DJwï¿½ï¿½Pï¿½zï¿½Iï¿½ï¿½5uÂœï¿½O4ï¿½ï¿½qï¿½wï¿½Xï¿½ï¿½ ï¿½ï¿½Ryï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½N*nï¿½Y@ï¿½ï¿½ ï¿½ï¿½--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--ï¿½UXï¿½Jï¿½+Ilï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½Ö›ï¿½ï¿½jï¿½ï¿½ï¿½ï¿½Í–ï¿½ï¿½ï¿½
+ï¿½ï¿½Mï¿½#ï¿½;ï¿½ï¿½fï¿½[ï¿½ï¿½ï¿½ï¿½eEnï¿½AEï¿½3BAï¿½È¼qÌŸ(ï¿½3Dï¿½ï¿½ï¿½Í‹iï¿½ï¿½jï¿½<;ï¿½ï¿½ï¿½cï¿½ï¿½1ï¿½hï¿½=?\ï¿½ï¿½Â¼?ï¿½ï¿½ï¿½?cï¿½ï¿½zMï¿½)75jï¿½FæŠï¿½L,ï¿½ï¿½`d? Mï¿½ï¿½ï¿½ï¿½dï¿½+{ï¿½Ì¾ï¿½<ï¿½Qï¿½dï¿½ãƒuÙ†7ï¿½0;ï¿½rï¿½/^ï¿½ï¿½O;ï¿½ï¿½`ï¿½ï¿½ï¿½Ê•	I+ï¿½Gï¿½ï¿½Rï¿½ï¿½ï¿½jqBXCï¿½ï¿½ï¿½d.ï¿½ï¿½ï¿½Sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xv*mBï¿½3rXï¿½Vï¿½ï¿½@ï¿½Ú‹ï¿½ï¿½vï¿½ï¿½%ï¿½u/ï¿½Kï¿½×ï¿½XF+ï¿½(ï¿½ï¿½ï¿½R/ dï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@ï¿½i->30ï¿½<ï¿½ï¿½ï¿½@ï¿½ï¿½ï¿½È•(ï¿½ï¿½1V!ï¿½ï¿½ï¿½%bï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½'ï¿½ ï¿½ï¿½Rsï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½/N{ï¿½ï¿½YGï¿½ ï¿½ï¿½--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--•Üãşµp™é&/Ü3â-aÄpßïÁŞ“ø&¶?q‚ß
+ÏKA—½•˜ìkkÉç­h!(ÏJ÷Ï}²,‰°ùaµ"¿ã-úàL¼Š7&$…¯áòƒOõ&ÌR8Ñ€ƒ¾%l5® †D//TRt*bµÍ'^Ö–Ğ´At$öj7ˆe±ïMdÁõºèã­§}—äÉƒ­ml¶
+s^ØŠ˜Ğ¤„w
+º€Õg¦Ät4Ûığæ˜§Hı,Ê8ñííÉRè…‰môP
+ï|Äì?ƒo‘Äh<‡\v"Ì•›½–ä÷!x¤ç#´KDrd~tƒtğ—â„£ìÊÊ¡†à_õ”°¤0T~ëñ'^¨KÅo–±_ïfìmêûŠÕ^;6—‹¸8`<t ‡90Q‰To¼HÂÙÜ¼À
+âÕ,Ñ†]®gín5ë)ÎTÒ`×ÇTy]ßï´Å0ÊÑõ¶@“‰k•Ê½”ªÒáŒŠñÊi2rçZÅ!nªô6'…O®œbœ±gè¨ÊÜÅ¤?½‚æŒQ¼z7Ôî=Ffuo[e</[óY™¾#”² \0rV3ñFB“î3»›ÃN$ ¯ôRlïø¯ô¯ô¯ôâ)N¯â×YYªà ¯ô-->

@@ -1,0 +1,145 @@
+/*轮播的样式*/
+.carousel-inner{
+	width: 1100px;
+	margin:0 auto;
+}
+.item img{
+	width: 1100px;
+    height: 440px;
+    margin: 0 auto;
+}
+.lef{
+	left: 80px;
+}
+.rig{
+	right: 80px;
+	left: auto;
+}
+.glyphicon-chevron-left{
+	font-size: 30px;
+	left:50px;
+	
+}
+
+/*这里开始  就要写下面的内容了*/
+.contentOne{
+	width: 1100px;
+	height: 665px;
+	margin: 0 auto;
+}
+.tit{
+	width: 300px;
+	height: 34px;
+	text-align: center;
+	font: bold 16px/34px arial;
+	border: 1px solid #101010;
+	margin: 80px auto 45px;
+}
+.pic li{
+	float: left;
+	margin:4px;
+}
+
+/*热卖单品的样式开始——————————*/
+
+.revLi,.revLi a{
+	width: 210px;
+	height: 285px;
+	text-decoration: none;
+	background: #F1F1F1;
+}
+.revLi p{
+	color: #333;
+	font:bold 14px "微软雅黑";
+	padding:8px 5px;
+	overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.revLi p:link{
+	cursor: pointer;
+}
+.revLi img{
+	width: 210px;
+	height: 210px;
+}
+.revLi strong{
+	color: #d22147;
+	display: inline-block;
+	padding:8px 65px 0 20px;
+	font: bold 20px "arial";
+}
+.revLi button{
+	background: #d22147;
+	height: 28px;
+	width: 64px;
+	font-family: "微软雅黑";
+	color: #FFFFFF;
+	border: none;
+	padding: 0;
+	position: relative;
+	top: -5px;
+}
+.hotImg{
+	height: 285px;
+	width: 428px;
+}
+
+/*————————热卖单品的样式结束*/
+
+/*品牌的样式开始啦 ——————————*/
+.contentTwo{
+	width: 1160px;
+	height: 450px;
+	margin: 0 auto;
+}
+.pic .more{
+	width: 185px;
+	height: 86px;
+	padding: 4px;
+	text-align: center;
+	font: bold 25px/86px "arial";
+}
+.pic .more a{
+	color: #101010;
+}
+
+.coatLeft {
+	float: left;
+}
+.coatLeft li,.coatLeft img{
+	float: none;
+	width: 210px;
+}
+.coatLeft2-div{
+	display: inline-block;
+	width: 215px;
+	height: 284px;
+}
+.coatLeft2{
+	width: 215px;
+	height: 284px;
+	padding: 10px 5px;
+	margin-top:13px;
+	display: inline-block;
+	background: #F1F1F1;
+}
+.coatLeft2 li,.coatLeft2 a{
+	float: left;
+	padding: 0;
+	margin: 0;
+	width: 102.5px;
+	height: 40px;
+	font-weight: inherit;
+	font:  14px/40px arial;
+	vertical-align: baseline;
+	text-align: center;
+	color: #000;
+	overflow:hidden;
+}
+
+.content{
+	width: 1160px;
+	height: 955px;
+	margin: 0 auto;
+}

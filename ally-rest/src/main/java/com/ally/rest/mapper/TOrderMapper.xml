@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ally.rest.mapper.TOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.ally.rest.po.TOrder" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="orderUUID" property="orderuuid" jdbcType="VARCHAR" />
+    <result column="NameofConsignee" property="nameofconsignee" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="consigneeTelephone" property="consigneetelephone" jdbcType="VARCHAR" />
+    <result column="orderStatus" property="orderstatus" jdbcType="INTEGER" />
+    <result column="creationTime" property="creationtime" jdbcType="TIMESTAMP" />
+    <result column="payTime" property="paytime" jdbcType="TIMESTAMP" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+    <result column="productID" property="productid" jdbcType="VARCHAR" />
+    <result column="DestinationCountryID" property="destinationcountryid" jdbcType="INTEGER" />
+    <result column="stoId" property="stoid" jdbcType="INTEGER" />
+    <result column="braId" property="braid" jdbcType="INTEGER" />
+    <result column="warehouseId" property="warehouseid" jdbcType="INTEGER" />
+    <result column="logisticID" property="logisticid" jdbcType="INTEGER" />
+    <result column="productNum" property="productnum" jdbcType="INTEGER" />
+    <result column="totalPrice" property="totalprice" jdbcType="INTEGER" />
+    <result column="bar_code" property="barCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, orderUUID, NameofConsignee, address, consigneeTelephone, orderStatus, creationTime, 
+    payTime, note, productID, DestinationCountryID, stoId, braId, warehouseId, logisticID, 
+    productNum, totalPrice, bar_code
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ally.rest.po.TOrderExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ally.rest.po.TOrderExample" >
+    delete from t_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ally.rest.po.TOrder" >
+    insert into t_order (id, orderUUID, NameofConsignee, 
+      address, consigneeTelephone, orderStatus, 
+      creationTime, payTime, note, 
+      productID, DestinationCountryID, stoId, 
+      braId, warehouseId, logisticID, 
+      productNum, totalPrice, bar_code
+      )
+    values (#{id,jdbcType=INTEGER}, #{orderuuid,jdbcType=VARCHAR}, #{nameofconsignee,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{consigneetelephone,jdbcType=VARCHAR}, #{orderstatus,jdbcType=INTEGER}, 
+      #{creationtime,jdbcType=TIMESTAMP}, #{paytime,jdbcType=TIMESTAMP}, #{note,jdbcType=VARCHAR}, 
+      #{productid,jdbcType=VARCHAR}, #{destinationcountryid,jdbcType=INTEGER}, #{stoid,jdbcType=INTEGER}, 
+      #{braid,jdbcType=INTEGER}, #{warehouseid,jdbcType=INTEGER}, #{logisticid,jdbcType=INTEGER}, 
+      #{productnum,jdbcType=INTEGER}, #{totalprice,jdbcType=INTEGER}, #{barCode,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ally.rest.po.TOrder" >
+    insert into t_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="orderuuid != null" >
+        orderUUID,
+      </if>
+      <if test="nameofconsignee != null" >
+        NameofConsignee,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="consigneetelephone != null" >
+        consigneeTelephone,
+      </if>
+      <if test="orderstatus != null" >
+        orderStatus,
+      </if>
+      <if test="creationtime != null" >
+        creationTime,
+      </if>
+      <if test="paytime != null" >
+        payTime,
+      </if>
+      <if test="note != null" >
+        note,
+      </if>
+      <if test="productid != null" >
+        productID,
+      </if>
+      <if test="destinationcountryid != null" >
+        DestinationCountryID,
+      </if>
+      <if test="stoid != null" >
+        stoId,
+      </if>
+      <if test="braid != null" >
+        braId,
+      </if>
+      <if test="warehouseid != null" >
+        warehouseId,
+      </if>
+      <if test="logisticid != null" >
+        logisticID,
+      </if>
+      <if test="productnum != null" >
+        productNum,
+      </if>
+      <if test="totalprice != null" >
+        totalPrice,
+      </if>
+      <if test="barCode != null" >
+        bar_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderuuid != null" >
+        #{orderuuid,jdbcType=VARCHAR},
+      </if>
+      <if test="nameofconsignee != null" >
+        #{nameofconsignee,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="consigneetelephone != null" >
+        #{consigneetelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="orderstatus != null" >
+        #{orderstatus,jdbcType=INTEGER},
+      </if>
+      <if test="creationtime != null" >
+        #{creationtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paytime != null" >
+        #{paytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="note != null" >
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="productid != null" >
+        #{productid,jdbcType=VARCHAR},
+      </if>
+      <if test="destinationcountryid != null" >
+        #{destinationcountryid,jdbcType=INTEGER},
+      </if>
+      <if test="stoid != null" >
+        #{stoid,jdbcType=INTEGER},
+      </if>
+      <if test="braid != null" >
+        #{braid,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseid != null" >
+        #{warehouseid,jdbcType=INTEGER},
+      </if>
+      <if test="logisticid != null" >
+        #{logisticid,jdbcType=INTEGER},
+      </if>
+      <if test="productnum != null" >
+        #{productnum,jdbcType=INTEGER},
+      </if>
+      <if test="totalprice != null" >
+        #{totalprice,jdbcType=INTEGER},
+      </if>
+      <if test="barCode != null" >
+        #{barCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ally.rest.po.TOrderExample" resultType="java.lang.Integer" >
+    select count(*) from t_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_order
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderuuid != null" >
+        orderUUID = #{record.orderuuid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nameofconsignee != null" >
+        NameofConsignee = #{record.nameofconsignee,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null" >
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.consigneetelephone != null" >
+        consigneeTelephone = #{record.consigneetelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderstatus != null" >
+        orderStatus = #{record.orderstatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.creationtime != null" >
+        creationTime = #{record.creationtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.paytime != null" >
+        payTime = #{record.paytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.note != null" >
+        note = #{record.note,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productid != null" >
+        productID = #{record.productid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.destinationcountryid != null" >
+        DestinationCountryID = #{record.destinationcountryid,jdbcType=INTEGER},
+      </if>
+      <if test="record.stoid != null" >
+        stoId = #{record.stoid,jdbcType=INTEGER},
+      </if>
+      <if test="record.braid != null" >
+        braId = #{record.braid,jdbcType=INTEGER},
+      </if>
+      <if test="record.warehouseid != null" >
+        warehouseId = #{record.warehouseid,jdbcType=INTEGER},
+      </if>
+      <if test="record.logisticid != null" >
+        logisticID = #{record.logisticid,jdbcType=INTEGER},
+      </if>
+      <if test="record.productnum != null" >
+        productNum = #{record.productnum,jdbcType=INTEGER},
+      </if>
+      <if test="record.totalprice != null" >
+        totalPrice = #{record.totalprice,jdbcType=INTEGER},
+      </if>
+      <if test="record.barCode != null" >
+        bar_code = #{record.barCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_order
+    set id = #{record.id,jdbcType=INTEGER},
+      orderUUID = #{record.orderuuid,jdbcType=VARCHAR},
+      NameofConsignee = #{record.nameofconsignee,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
+      consigneeTelephone = #{record.consigneetelephone,jdbcType=VARCHAR},
+      orderStatus = #{record.orderstatus,jdbcType=INTEGER},
+      creationTime = #{record.creationtime,jdbcType=TIMESTAMP},
+      payTime = #{record.paytime,jdbcType=TIMESTAMP},
+      note = #{record.note,jdbcType=VARCHAR},
+      productID = #{record.productid,jdbcType=VARCHAR},
+      DestinationCountryID = #{record.destinationcountryid,jdbcType=INTEGER},
+      stoId = #{record.stoid,jdbcType=INTEGER},
+      braId = #{record.braid,jdbcType=INTEGER},
+      warehouseId = #{record.warehouseid,jdbcType=INTEGER},
+      logisticID = #{record.logisticid,jdbcType=INTEGER},
+      productNum = #{record.productnum,jdbcType=INTEGER},
+      totalPrice = #{record.totalprice,jdbcType=INTEGER},
+      bar_code = #{record.barCode,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ally.rest.po.TOrder" >
+    update t_order
+    <set >
+      <if test="orderuuid != null" >
+        orderUUID = #{orderuuid,jdbcType=VARCHAR},
+      </if>
+      <if test="nameofconsignee != null" >
+        NameofConsignee = #{nameofconsignee,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="consigneetelephone != null" >
+        consigneeTelephone = #{consigneetelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="orderstatus != null" >
+        orderStatus = #{orderstatus,jdbcType=INTEGER},
+      </if>
+      <if test="creationtime != null" >
+        creationTime = #{creationtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paytime != null" >
+        payTime = #{paytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="note != null" >
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="productid != null" >
+        productID = #{productid,jdbcType=VARCHAR},
+      </if>
+      <if test="destinationcountryid != null" >
+        DestinationCountryID = #{destinationcountryid,jdbcType=INTEGER},
+      </if>
+      <if test="stoid != null" >
+        stoId = #{stoid,jdbcType=INTEGER},
+      </if>
+      <if test="braid != null" >
+        braId = #{braid,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseid != null" >
+        warehouseId = #{warehouseid,jdbcType=INTEGER},
+      </if>
+      <if test="logisticid != null" >
+        logisticID = #{logisticid,jdbcType=INTEGER},
+      </if>
+      <if test="productnum != null" >
+        productNum = #{productnum,jdbcType=INTEGER},
+      </if>
+      <if test="totalprice != null" >
+        totalPrice = #{totalprice,jdbcType=INTEGER},
+      </if>
+      <if test="barCode != null" >
+        bar_code = #{barCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ally.rest.po.TOrder" >
+    update t_order
+    set orderUUID = #{orderuuid,jdbcType=VARCHAR},
+      NameofConsignee = #{nameofconsignee,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      consigneeTelephone = #{consigneetelephone,jdbcType=VARCHAR},
+      orderStatus = #{orderstatus,jdbcType=INTEGER},
+      creationTime = #{creationtime,jdbcType=TIMESTAMP},
+      payTime = #{paytime,jdbcType=TIMESTAMP},
+      note = #{note,jdbcType=VARCHAR},
+      productID = #{productid,jdbcType=VARCHAR},
+      DestinationCountryID = #{destinationcountryid,jdbcType=INTEGER},
+      stoId = #{stoid,jdbcType=INTEGER},
+      braId = #{braid,jdbcType=INTEGER},
+      warehouseId = #{warehouseid,jdbcType=INTEGER},
+      logisticID = #{logisticid,jdbcType=INTEGER},
+      productNum = #{productnum,jdbcType=INTEGER},
+      totalPrice = #{totalprice,jdbcType=INTEGER},
+      bar_code = #{barCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,3 +1,14 @@
+com\ally\manager\controller\BackPageMoneyInfoController.class
+com\ally\manager\controller\BackPageAdminController.class
+com\ally\manager\controller\BackPageCategoryController.class
+com\ally\manager\controller\BackPageStorePtController.class
+com\ally\manager\controller\BackPageProductController.class
+com\ally\manager\controller\BackPageBrandQyController.class
+com\ally\manager\controller\BackPageStoreDzController.class
 com\ally\manager\utils\MSG.class
+com\ally\manager\controller\BackPageBrandPpController.class
+com\ally\manager\controller\BackPageBrandPpCheckController.class
 com\ally\manager\controller\UserController.class
-com\ally\manager\controller\BackPage.class
+com\ally\manager\controller\BackPageMoneyDetailController.class
+com\ally\manager\controller\BackPageStoreDzCheckController.class
+com\ally\manager\controller\BackPageWarehouseController.class

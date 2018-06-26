@@ -305,6 +305,146 @@ public class TAdminExample {
             return (Criteria) this;
         }
 
+        public Criteria andNameIsNull() {
+            addCriterion("name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameIsNotNull() {
+            addCriterion("name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameEqualTo(String value) {
+            addCriterion("name =", value, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameNotEqualTo(String value) {
+            addCriterion("name <>", value, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameGreaterThan(String value) {
+            addCriterion("name >", value, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameGreaterThanOrEqualTo(String value) {
+            addCriterion("name >=", value, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameLessThan(String value) {
+            addCriterion("name <", value, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameLessThanOrEqualTo(String value) {
+            addCriterion("name <=", value, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameLike(String value) {
+            addCriterion("name like", value, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameNotLike(String value) {
+            addCriterion("name not like", value, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameIn(List<String> values) {
+            addCriterion("name in", values, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameNotIn(List<String> values) {
+            addCriterion("name not in", values, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameBetween(String value1, String value2) {
+            addCriterion("name between", value1, value2, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andNameNotBetween(String value1, String value2) {
+            addCriterion("name not between", value1, value2, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailIsNull() {
+            addCriterion("email is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailIsNotNull() {
+            addCriterion("email is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailEqualTo(String value) {
+            addCriterion("email =", value, "email");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailNotEqualTo(String value) {
+            addCriterion("email <>", value, "email");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailGreaterThan(String value) {
+            addCriterion("email >", value, "email");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailGreaterThanOrEqualTo(String value) {
+            addCriterion("email >=", value, "email");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailLessThan(String value) {
+            addCriterion("email <", value, "email");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailLessThanOrEqualTo(String value) {
+            addCriterion("email <=", value, "email");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailLike(String value) {
+            addCriterion("email like", value, "email");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailNotLike(String value) {
+            addCriterion("email not like", value, "email");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailIn(List<String> values) {
+            addCriterion("email in", values, "email");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailNotIn(List<String> values) {
+            addCriterion("email not in", values, "email");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailBetween(String value1, String value2) {
+            addCriterion("email between", value1, value2, "email");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailNotBetween(String value1, String value2) {
+            addCriterion("email not between", value1, value2, "email");
+            return (Criteria) this;
+        }
+
         public Criteria andRegisterTimeIsNull() {
             addCriterion("register_time is null");
             return (Criteria) this;
@@ -365,203 +505,63 @@ public class TAdminExample {
             return (Criteria) this;
         }
 
-        public Criteria andRegisterIpIsNull() {
-            addCriterion("register_ip is null");
+        public Criteria andUpdateTimeIsNull() {
+            addCriterion("update_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andRegisterIpIsNotNull() {
-            addCriterion("register_ip is not null");
+        public Criteria andUpdateTimeIsNotNull() {
+            addCriterion("update_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRegisterIpEqualTo(String value) {
-            addCriterion("register_ip =", value, "registerIp");
+        public Criteria andUpdateTimeEqualTo(Date value) {
+            addCriterion("update_time =", value, "updateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRegisterIpNotEqualTo(String value) {
-            addCriterion("register_ip <>", value, "registerIp");
+        public Criteria andUpdateTimeNotEqualTo(Date value) {
+            addCriterion("update_time <>", value, "updateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRegisterIpGreaterThan(String value) {
-            addCriterion("register_ip >", value, "registerIp");
+        public Criteria andUpdateTimeGreaterThan(Date value) {
+            addCriterion("update_time >", value, "updateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRegisterIpGreaterThanOrEqualTo(String value) {
-            addCriterion("register_ip >=", value, "registerIp");
+        public Criteria andUpdateTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("update_time >=", value, "updateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRegisterIpLessThan(String value) {
-            addCriterion("register_ip <", value, "registerIp");
+        public Criteria andUpdateTimeLessThan(Date value) {
+            addCriterion("update_time <", value, "updateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRegisterIpLessThanOrEqualTo(String value) {
-            addCriterion("register_ip <=", value, "registerIp");
+        public Criteria andUpdateTimeLessThanOrEqualTo(Date value) {
+            addCriterion("update_time <=", value, "updateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRegisterIpLike(String value) {
-            addCriterion("register_ip like", value, "registerIp");
+        public Criteria andUpdateTimeIn(List<Date> values) {
+            addCriterion("update_time in", values, "updateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRegisterIpNotLike(String value) {
-            addCriterion("register_ip not like", value, "registerIp");
+        public Criteria andUpdateTimeNotIn(List<Date> values) {
+            addCriterion("update_time not in", values, "updateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRegisterIpIn(List<String> values) {
-            addCriterion("register_ip in", values, "registerIp");
+        public Criteria andUpdateTimeBetween(Date value1, Date value2) {
+            addCriterion("update_time between", value1, value2, "updateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRegisterIpNotIn(List<String> values) {
-            addCriterion("register_ip not in", values, "registerIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andRegisterIpBetween(String value1, String value2) {
-            addCriterion("register_ip between", value1, value2, "registerIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andRegisterIpNotBetween(String value1, String value2) {
-            addCriterion("register_ip not between", value1, value2, "registerIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginTimeIsNull() {
-            addCriterion("login_time is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginTimeIsNotNull() {
-            addCriterion("login_time is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginTimeEqualTo(Date value) {
-            addCriterion("login_time =", value, "loginTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginTimeNotEqualTo(Date value) {
-            addCriterion("login_time <>", value, "loginTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginTimeGreaterThan(Date value) {
-            addCriterion("login_time >", value, "loginTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("login_time >=", value, "loginTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginTimeLessThan(Date value) {
-            addCriterion("login_time <", value, "loginTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginTimeLessThanOrEqualTo(Date value) {
-            addCriterion("login_time <=", value, "loginTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginTimeIn(List<Date> values) {
-            addCriterion("login_time in", values, "loginTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginTimeNotIn(List<Date> values) {
-            addCriterion("login_time not in", values, "loginTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginTimeBetween(Date value1, Date value2) {
-            addCriterion("login_time between", value1, value2, "loginTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginTimeNotBetween(Date value1, Date value2) {
-            addCriterion("login_time not between", value1, value2, "loginTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginIpIsNull() {
-            addCriterion("login_ip is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginIpIsNotNull() {
-            addCriterion("login_ip is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginIpEqualTo(String value) {
-            addCriterion("login_ip =", value, "loginIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginIpNotEqualTo(String value) {
-            addCriterion("login_ip <>", value, "loginIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginIpGreaterThan(String value) {
-            addCriterion("login_ip >", value, "loginIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginIpGreaterThanOrEqualTo(String value) {
-            addCriterion("login_ip >=", value, "loginIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginIpLessThan(String value) {
-            addCriterion("login_ip <", value, "loginIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginIpLessThanOrEqualTo(String value) {
-            addCriterion("login_ip <=", value, "loginIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginIpLike(String value) {
-            addCriterion("login_ip like", value, "loginIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginIpNotLike(String value) {
-            addCriterion("login_ip not like", value, "loginIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginIpIn(List<String> values) {
-            addCriterion("login_ip in", values, "loginIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginIpNotIn(List<String> values) {
-            addCriterion("login_ip not in", values, "loginIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginIpBetween(String value1, String value2) {
-            addCriterion("login_ip between", value1, value2, "loginIp");
-            return (Criteria) this;
-        }
-
-        public Criteria andLoginIpNotBetween(String value1, String value2) {
-            addCriterion("login_ip not between", value1, value2, "loginIp");
+        public Criteria andUpdateTimeNotBetween(Date value1, Date value2) {
+            addCriterion("update_time not between", value1, value2, "updateTime");
             return (Criteria) this;
         }
 

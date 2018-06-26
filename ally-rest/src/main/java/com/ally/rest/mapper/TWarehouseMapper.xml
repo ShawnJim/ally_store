@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ally.rest.mapper.TWarehouseMapper" >
+  <resultMap id="BaseResultMap" type="com.ally.rest.po.TWarehouse" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="userID" property="userid" jdbcType="INTEGER" />
+    <result column="countryID" property="countryid" jdbcType="INTEGER" />
+    <result column="citiesID" property="citiesid" jdbcType="INTEGER" />
+    <result column="districtofCountryID" property="districtofcountryid" jdbcType="INTEGER" />
+    <result column="districtofCityID" property="districtofcityid" jdbcType="INTEGER" />
+    <result column="detailAddress" property="detailaddress" jdbcType="VARCHAR" />
+    <result column="postCode" property="postcode" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="registerTime" property="registertime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, name, userID, countryID, citiesID, districtofCountryID, districtofCityID, detailAddress, 
+    postCode, type, registerTime, updateTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ally.rest.po.TWarehouseExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_warehouse
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_warehouse
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_warehouse
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ally.rest.po.TWarehouseExample" >
+    delete from t_warehouse
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ally.rest.po.TWarehouse" >
+    insert into t_warehouse (id, name, userID, 
+      countryID, citiesID, districtofCountryID, 
+      districtofCityID, detailAddress, postCode, 
+      type, registerTime, updateTime
+      )
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER}, 
+      #{countryid,jdbcType=INTEGER}, #{citiesid,jdbcType=INTEGER}, #{districtofcountryid,jdbcType=INTEGER}, 
+      #{districtofcityid,jdbcType=INTEGER}, #{detailaddress,jdbcType=VARCHAR}, #{postcode,jdbcType=INTEGER}, 
+      #{type,jdbcType=VARCHAR}, #{registertime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ally.rest.po.TWarehouse" >
+    insert into t_warehouse
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="userid != null" >
+        userID,
+      </if>
+      <if test="countryid != null" >
+        countryID,
+      </if>
+      <if test="citiesid != null" >
+        citiesID,
+      </if>
+      <if test="districtofcountryid != null" >
+        districtofCountryID,
+      </if>
+      <if test="districtofcityid != null" >
+        districtofCityID,
+      </if>
+      <if test="detailaddress != null" >
+        detailAddress,
+      </if>
+      <if test="postcode != null" >
+        postCode,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="registertime != null" >
+        registerTime,
+      </if>
+      <if test="updatetime != null" >
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="countryid != null" >
+        #{countryid,jdbcType=INTEGER},
+      </if>
+      <if test="citiesid != null" >
+        #{citiesid,jdbcType=INTEGER},
+      </if>
+      <if test="districtofcountryid != null" >
+        #{districtofcountryid,jdbcType=INTEGER},
+      </if>
+      <if test="districtofcityid != null" >
+        #{districtofcityid,jdbcType=INTEGER},
+      </if>
+      <if test="detailaddress != null" >
+        #{detailaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="postcode != null" >
+        #{postcode,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="registertime != null" >
+        #{registertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ally.rest.po.TWarehouseExample" resultType="java.lang.Integer" >
+    select count(*) from t_warehouse
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_warehouse
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userid != null" >
+        userID = #{record.userid,jdbcType=INTEGER},
+      </if>
+      <if test="record.countryid != null" >
+        countryID = #{record.countryid,jdbcType=INTEGER},
+      </if>
+      <if test="record.citiesid != null" >
+        citiesID = #{record.citiesid,jdbcType=INTEGER},
+      </if>
+      <if test="record.districtofcountryid != null" >
+        districtofCountryID = #{record.districtofcountryid,jdbcType=INTEGER},
+      </if>
+      <if test="record.districtofcityid != null" >
+        districtofCityID = #{record.districtofcityid,jdbcType=INTEGER},
+      </if>
+      <if test="record.detailaddress != null" >
+        detailAddress = #{record.detailaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postcode != null" >
+        postCode = #{record.postcode,jdbcType=INTEGER},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registertime != null" >
+        registerTime = #{record.registertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatetime != null" >
+        updateTime = #{record.updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_warehouse
+    set id = #{record.id,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      userID = #{record.userid,jdbcType=INTEGER},
+      countryID = #{record.countryid,jdbcType=INTEGER},
+      citiesID = #{record.citiesid,jdbcType=INTEGER},
+      districtofCountryID = #{record.districtofcountryid,jdbcType=INTEGER},
+      districtofCityID = #{record.districtofcityid,jdbcType=INTEGER},
+      detailAddress = #{record.detailaddress,jdbcType=VARCHAR},
+      postCode = #{record.postcode,jdbcType=INTEGER},
+      type = #{record.type,jdbcType=VARCHAR},
+      registerTime = #{record.registertime,jdbcType=TIMESTAMP},
+      updateTime = #{record.updatetime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ally.rest.po.TWarehouse" >
+    update t_warehouse
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        userID = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="countryid != null" >
+        countryID = #{countryid,jdbcType=INTEGER},
+      </if>
+      <if test="citiesid != null" >
+        citiesID = #{citiesid,jdbcType=INTEGER},
+      </if>
+      <if test="districtofcountryid != null" >
+        districtofCountryID = #{districtofcountryid,jdbcType=INTEGER},
+      </if>
+      <if test="districtofcityid != null" >
+        districtofCityID = #{districtofcityid,jdbcType=INTEGER},
+      </if>
+      <if test="detailaddress != null" >
+        detailAddress = #{detailaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="postcode != null" >
+        postCode = #{postcode,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="registertime != null" >
+        registerTime = #{registertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ally.rest.po.TWarehouse" >
+    update t_warehouse
+    set name = #{name,jdbcType=VARCHAR},
+      userID = #{userid,jdbcType=INTEGER},
+      countryID = #{countryid,jdbcType=INTEGER},
+      citiesID = #{citiesid,jdbcType=INTEGER},
+      districtofCountryID = #{districtofcountryid,jdbcType=INTEGER},
+      districtofCityID = #{districtofcityid,jdbcType=INTEGER},
+      detailAddress = #{detailaddress,jdbcType=VARCHAR},
+      postCode = #{postcode,jdbcType=INTEGER},
+      type = #{type,jdbcType=VARCHAR},
+      registerTime = #{registertime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

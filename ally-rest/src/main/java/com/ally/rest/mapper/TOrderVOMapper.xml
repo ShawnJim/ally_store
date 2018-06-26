@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ally.rest.mapper.TOrderVOMapper">
+	<resultMap type="com.ally.rest.po.TOrderVO"
+		id="orderBean">
+		<id column="id" property="id" />
+		<result column="orderUUID" property="orderuuid" />
+		<result column="NameofConsignee" property="nameofconsignee" />		
+		<result column="address" property="address" />
+		<result column="consigneeTelephone" property="consigneetelephone" />
+		<result column="orderStatus" property="orderstatus" />
+		<result column="creationTime" property="creationtime" />
+		<result column="payTime" property="paytime" />
+		<result column="note" property="note" />
+		<result column="productID" property="productid" />
+		<result column="DestinationCountryID" property="destinationcountryid" />
+		<result column="stoId" property="stoid" />
+		<result column="braId" property="braid" />
+		<result column="warehouseId" property="warehouseid" />
+		<result column="logisticID" property="logisticid" />
+		<result column="productNum" property="productnum" />
+		<result column="totalPrice" property="totalprice" />
+		<result column="bar_code" property="barCode" />
+		<!-- 一对多的关系 -->
+		<!-- property: 指的是集合属性的值, ofType：指的是集合中元素的类型 -->
+		<collection property="products"
+			ofType="com.ally.rest.po.TProduct">
+			<result column="name" property="name" />
+			<result column="price" property="price" />
+		</collection>
+	</resultMap>
+
+	<!-- 通过订单id获取订单 -->
+	<select id="orderByOrderid" resultMap="orderBean"
+		parameterType="java.lang.String">
+		SELECT o.*,p.name,p.price FROM
+		t_order o,t_product p
+		WHERE o.productID = p.id
+		AND o.orderUUID = #{oid}
+	</select>
+	
+	<!-- 通过分销商id获取订单 -->
+	<select id="orderByStoid" resultMap="orderBean"
+		parameterType="java.lang.Integer">
+		SELECT o.*,p.name,p.price FROM
+		t_order o,t_product p
+		WHERE o.productID = p.id
+		AND o.stoId = #{sid,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 通过品牌商id获取订单 -->
+	<select id="orderByBraid" resultMap="orderBean"
+		parameterType="java.lang.Integer">
+		SELECT o.*,p.name,p.price FROM
+		t_order o,t_product p
+		WHERE o.productID = p.id
+		AND o.braId = #{braid,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 通过分销商id获取订单 -->
+	<select id="orderByStoidandOrderStatus" resultMap="orderBean">
+		SELECT o.*,p.name,p.price FROM
+		t_order o,t_product p
+		WHERE o.productID = p.id
+		AND o.stoId = #{stoid,jdbcType=INTEGER}
+		And o.orderStatus = #{orderstatus,jdbcType=INTEGER}
+	</select>
+	
+	
+</mapper>

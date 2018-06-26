@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ally.manager.mapper.my.MyTProductMapper" >
+<!-- 查询产品管理-产品管理信息分页 -->
+  	<select id="selectMyTProduct" resultType="com.ally.manager.pojo.my.MyTProduct">
+    SELECT
+			
+			p.id,
+			p.name productName,
+			p.recommendPrice ,
+			c.name categoryName,
+			u.username,
+			p.sku_status skuStatus,
+			p.shelfTime,
+			p.update_time updateTime
+			
+	FROM
+			t_user u , t_product p , t_category c
+	WHERE u.state = 1 AND u.roleId = 2 AND u.id = p.userID AND p.f_Categoryid = c.id
+  </select>
+  
+  <!-- 根据产品名称查询产品管理信息 -->
+  <select id="selectMyProductProductName" parameterType="string" resultType="com.ally.manager.pojo.my.MyTProduct">
+	SELECT
+			
+			p.id,
+			p.name productName,
+			p.recommendPrice ,
+			c.name categoryName,
+			u.username,
+			p.sku_status skuStatus,
+			p.shelfTime,
+			p.update_time updateTime
+			
+	FROM
+			t_user u , t_product p , t_category c
+	WHERE u.state = 1 AND u.roleId = 2 AND u.id = p.userID AND p.f_Categoryid = c.id AND p.name = #{productName}
+  </select>
+  
+  <!-- 根据id更改产品信息 -->
+  <update id="updateMyTProduct" parameterType="com.ally.manager.pojo.my.MyTProduct">
+	UPDATE
+		t_user u, t_category c,t_product p
+	SET
+			p.name = #{productName},
+			p.recommendPrice = #{recommendPrice},
+			p.sku_status = #{state}
+	WHERE u.state = 1 AND u.roleId = 2 AND u.id = p.userID AND p.f_Categoryid = c.id AND p.id = #{id}
+  </update>
+  
+    <!-- 单个删除产品信息 -->
+  <delete id="deleteByPrimaryKey" parameterType="string">
+		DELETE FROM t_product WHERE id = #{id}
+  </delete>
+  
+  <!-- 批量删除产品信息 -->
+  <delete id="deleteBatchMyProduct" parameterType="java.util.List">
+  	DELETE FROM t_product WHERE id in
+	<foreach collection="list" item="ids" open="(" separator="," close=")">
+		#{ids}
+	</foreach>
+  </delete>
+  
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ally.manager.mapper.my.MyTWarehouseMapper" >
+  <!-- 查询仓库信息分页 -->
+  <select id="selectMysWarehouse" resultType="com.ally.manager.pojo.my.MyTWarehouse">
+SELECT 
+	w.id,
+	w.name,
+	w.detailAddress,
+	w.postCode,
+	w.type,
+	w.registerTime,
+	w.updateTime,
+	u.userName,
+	u.phone
+	
+FROM t_warehouse w , t_user u
+WHERE w.userId = u.id
+  </select>
+
+</mapper>

@@ -9,13 +9,13 @@ public class TAdmin {
 
     private String password;
 
+    private String name;
+
+    private String email;
+
     private Date registerTime;
 
-    private String registerIp;
-
-    private Date loginTime;
-
-    private String loginIp;
+    private Date updateTime;
 
     private String state;
 
@@ -43,6 +43,22 @@ public class TAdmin {
         this.password = password == null ? null : password.trim();
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim();
+    }
+
     public Date getRegisterTime() {
         return registerTime;
     }
@@ -51,28 +67,12 @@ public class TAdmin {
         this.registerTime = registerTime;
     }
 
-    public String getRegisterIp() {
-        return registerIp;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setRegisterIp(String registerIp) {
-        this.registerIp = registerIp == null ? null : registerIp.trim();
-    }
-
-    public Date getLoginTime() {
-        return loginTime;
-    }
-
-    public void setLoginTime(Date loginTime) {
-        this.loginTime = loginTime;
-    }
-
-    public String getLoginIp() {
-        return loginIp;
-    }
-
-    public void setLoginIp(String loginIp) {
-        this.loginIp = loginIp == null ? null : loginIp.trim();
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     public String getState() {

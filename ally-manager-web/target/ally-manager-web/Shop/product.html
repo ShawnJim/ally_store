@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/style.css" />
+    <script type="text/javascript" src="../Js/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="../Js/bootstrap.js"></script>
+    <script type="text/javascript" src="../Js/common.js"></script>
+    
+    <!-- 分页 -->
+    <script src="../Js/jqPaginator.min.js" type="text/javascript"></script>
+<!--     <script src="../Js/myPage.js" type="text/javascript"></script> -->
+    
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+        
+        .page_info_main>.page_info1{
+        	float:left;  
+    		width:40%;  
+    		height:100px;  
+    		line-height:75px;  
+        }
+       .page_info_main>.page_info2{
+  			float:left;  
+    		width:60%;  
+    		height:100px;  
+    		line-height:100px;  
+        }
+        
+
+
+    </style>
+</head>
+<body>
+<form class="form-inline definewidth m20">    
+    产品名称：
+    <input type="text" name="productName" id="productName" class="abc input-default" placeholder="" value="">&nbsp;&nbsp;  
+    <button type="button" class="btn btn-primary" id="selectProducts">查询</button>
+    <!-- &nbsp;&nbsp; <button type="button" class="btn btn-success" id="addnew">新增产品</button> -->
+    &nbsp;&nbsp; <button type="button" class="btn btn-danger" id="deleteProduct-all">批量删除</button>
+</form>
+<table id="table_PageInfo" class="table table-bordered table-hover definewidth m10">
+</table>
+<div class="page_info_main">
+	<div id="page_info" class="page_info1" style="float: left;"></div>
+	<div class="page_info2" id="page_info2" style="float: left;">
+        <ul class="pagination" id="pagination">
+        </ul>
+        <input type="hidden" id="PageCount" />
+        <input type="hidden" id="PageSize" value="8" />
+        <input type="hidden" id="countindex"/>
+        
+        <input type="hidden" id="visiblePages" value="5" />
+	</div>
+</div>
+
+</body>
+</html>
+<script>
+
+function loadpage() {
+    var myPageCount = parseInt($("#PageCount").val());//总条目数
+    var myPageSize = parseInt($("#PageSize").val());//每页显示多少条数据
+    var countindex = myPageCount % myPageSize > 0 ? (myPageCount / myPageSize) + 1 : (myPageCount / myPageSize);
+    $("#countindex").val(countindex);
+    
+    
+
+    $.jqPaginator('#pagination', {
+        totalPages: parseInt($("#countindex").val()),	//分页的总页数
+        visiblePages: parseInt($("#visiblePages").val()),//每页最多显示多少页码
+        currentPage: 1,
+        first: '<li class="first"><a href="javascript:;">首页</a></li>',
+        prev: '<li class="prev"><a href="javascript:;"><i class="arrow arrow2"></i>上一页</a></li>',
+        next: '<li class="next"><a href="javascript:;">下一页<i class="arrow arrow3"></i></a></li>',
+        last: '<li class="last"><a href="javascript:;">末页</a></li>',
+        page: '<li class="page"><a href="javascript:;">{{page}}</a></li>',
+        onPageChange: function (num, type) {
+            if (type == "change") {
+                //exeData(num, type);
+            	$("#page_info").empty();//清空信息栏
+            	$("#table_PageInfo").empty();//清空表格
+        			$.ajax({
+        				  type: "GET",
+        				  url: "/back/productPage.do?page="+num+"&rows="+myPageSize,
+        				  success: function(data){
+        					  	$('#pagination').jqPaginator('option', {
+        					  		totalPages: data.pages//总页数
+        					  	});
+        						showPageInfo(data);
+        						showPageTable(data);
+        				  }
+        				});
+            	
+            }else{
+            	$("#page_info").empty();//清空信息栏
+            	$("#table_PageInfo").empty();//清空表格
+        			$.ajax({
+        				  type: "GET",
+        				  url: "/back/productPage.do?page="+num+"&rows="+myPageSize,
+        				  success: function(data){
+        					  	$('#pagination').jqPaginator('option', {
+        		                    totalPages: data.pages//总页数
+        		                });
+        						showPageInfo(data);
+        						showPageTable(data);
+        				  }
+        				});
+            }
+        }
+    });
+}
+$(function () {
+    loadData(1);
+    loadpage();
+});
+
+function loadData(num) {
+	$("#PageCount").val("9");	//一共多少条数据
+}
+
+
+/*function exeData(num, type) {
+    loadData(num);
+    loadpage();
+}*/
+
+//显示分页表格信息
+function showPageTable(data){
+	var state = "";
+	$("#table_PageInfo").append("<thead><tr><th><input type='checkbox' id='check_all'/></th><th>产品编号</th><th>产品名称</th><th>建议价格</th><th>所属分类</th><th>所属品牌商</th><th>上架时间</th><th>更新时间</th><th>状态</th><th>操作</th></tr></thead>");
+	$.each(data.rows,function(i,item){
+		var shelftime = timestampToTime(item.shelftime);
+		var updateTime = timestampToTime(item.updateTime);
+		if(item.skuStatus == "0"){
+			state = "待发布";
+		}else if(item.skuStatus == "1"){
+			state = "销售中";
+		}else{
+			state = "已下架";
+		}
+		$("#table_PageInfo").append("<tr><td><input type='checkbox'  class='check_product' /></td><td>"+item.id+"</td><td>"+item.productName+"</td><td>"+item.recommendPrice+"</td><td>"+item.categoryName+"</td><td>"+item.username+"</td><td>"+shelftime+"</td><td>"+updateTime+"</td><td>"+state+"</td><td><button type='button' class='btn btn-danger btn-sm delete-product'>删除</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type='button' class='btn btn-info btn-sm edit-product'>编辑</button></td></tr>");
+	});	
+}
+
+
+//显示分页信息栏
+function showPageInfo(data){
+	$("#page_info").append("<strong>&nbsp;&nbsp;&nbsp;&nbsp;共"+data.total+"条记录 &nbsp;"+data.pageNum+"/"+data.pages+"页 </strong>");
+}
+
+//日期格式化
+function timestampToTime(timestamp) {  
+    var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000  
+    Y = date.getFullYear() + '/';  
+    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '/';  
+    D = date.getDate() + ' ';  
+    h = date.getHours() + ':';  
+    m = date.getMinutes() + ':';  
+    s = date.getSeconds();  
+    return Y+M+D+h+m+s;  
+} 
+
+//对Date的扩展，将 Date 转化为指定格式的String  
+//    ===调用方法:
+//	    		var time2 = new Date().Format("yyyy-MM-dd HH:mm:ss");
+//  			alert(time2);
+// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，   
+// 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)   
+Date.prototype.Format = function (fmt) { //author: meizz   
+    var o = {  
+        "M+": this.getMonth() + 1, //月份   
+        "d+": this.getDate(), //日   
+        "H+": this.getHours(), //小时   
+        "m+": this.getMinutes(), //分   
+        "s+": this.getSeconds(), //秒   
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度   
+        "S": this.getMilliseconds() //毫秒   
+    };  
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));  
+    for (var k in o)  
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));  
+    return fmt;  
+}  
+	
+//单个删除
+$(document).on("click",".delete-product",function(){
+	//var productId = $(this).attr("id");
+	var productId = $(this).parents("tr").find("td:eq(1)").text();
+	var productName = $(this).parents("tr").find("td:eq(2)").text();
+	if(confirm("确认删除"+productName+"吗？")){
+		$.ajax({
+			url:"/back/deleteMyProduct.do?ids="+productId,
+			type:"DELETE",
+			success:function(data){
+				alert("删除成功");
+				//返回首页
+				window.location.href="product.html";
+			}
+		});
+	}
+});
+
+
+
+$(document).on("click","#check_all",function(){
+	//attr获取checked是undefined;
+	//我们这些dom原生的属性;attr获取自定义属性的值;
+	//prop修改和读取dom原生属性的值
+	$(".check_product").prop("checked",$(this).prop("checked"));
+	
+});
+
+
+
+$(document).on("click",".check_product",function(){
+	//判断当前选择中的元素是否5个
+	var flag = $(".check_product:checked").length==$(".check_product").length;
+	$("#check_all").prop("checked",flag);
+	
+});
+	
+		
+		//点击全部删除,就批量
+		$("#deleteProduct-all").click(function(){
+			//员工名字
+			var productNames = "";
+			//员工id
+			var del_idstr = "";
+			$.each($(".check_product:checked"),function(){
+				productNames += $(this).parents("tr").find("td:eq(2)").text()+",";
+				del_idstr += $(this).parents("tr").find("td:eq(1)").text()+"-";
+			});
+			//去除productNames多余的,
+			productNames = productNames.substring(0,productNames.length-1);
+			//去除del_idstr多余的-
+			del_idstr = del_idstr.substring(0,del_idstr.length-1);
+			
+			if(confirm("确认删除【"+productNames+"】吗?")){
+				//发送ajax请求删除
+				$.ajax({
+					url:"/back/deleteMyProduct.do?ids="+del_idstr,
+					type:"DELETE",
+					success:function(result){
+						alert("删除成功");
+						//返回首页
+						window.location.href="product.html";
+					},
+				});
+			}
+		});
+		
+    $(function () {
+    	
+    	//查询
+        $("#selectProducts").click(function(){
+        	var productName = $("#productName").val();
+        	$.ajax({
+    			url:"/back/selectMyProduct.do?productName="+productName,
+    			type:"POST",
+    			success:function(data){
+    				$("#page_info").empty();//清空信息栏
+                	$("#table_PageInfo").empty();//清空表格
+                	$("#page_info2").empty();//清空分页
+    				showPageTable(data);//显示查询的数据
+    				
+    			}
+    		});
+        	
+        });
+    	
+    	
+    	//显示查询的数据
+        function showPageTable(data){
+        	var state = "";
+        	
+        	$("#table_PageInfo").append("<thead><tr><th><input type='checkbox' id='check_all'/></th><th>产品编号</th><th>产品名称</th><th>建议价格</th><th>所属分类</th><th>所属品牌商</th><th>上架时间</th><th>更新时间</th><th>状态</th><th>操作</th></tr></thead>");
+        	$.each(data.extend.list,function(i,item){
+        		var shelftime = timestampToTime(item.shelftime);
+        		var updateTime = timestampToTime(item.updateTime);
+        		if(item.skuStatus == "0"){
+        			state = "待发布";
+        		}else if(item.skuStatus == "1"){
+        			state = "销售中";
+        		}else if(item.skuStatus == "2"){
+        			state = "已下架";
+        		}
+        		$("#table_PageInfo").append("<tr><td><input type='checkbox'  class='check_product' /></td><td>"+item.id+"</td><td>"+item.productName+"</td><td>"+item.recommendPrice+"</td><td>"+item.categoryName+"</td><td>"+item.username+"</td><td>"+shelftime+"</td><td>"+updateTime+"</td><td>"+state+"</td><td><button type='button' class='btn btn-danger btn-sm delete-product'>删除</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type='button' class='btn btn-info btn-sm edit-product'>编辑</button></td></tr>");
+        	});	
+        }
+    		
+		$('#addnew').click(function(){
+
+				window.location.href="product_add.html";
+		 });
+
+
+    });
+    
+    //向edit页面传值
+    $(document).on("click",".edit-product",function(){
+    	var id = $(this).parents("tr").find("td:eq(1)").text();
+    	var productName = $(this).parents("tr").find("td:eq(2)").text();
+    	var recommendPrice = $(this).parents("tr").find("td:eq(3)").text();
+    	var categoryName = $(this).parents("tr").find("td:eq(4)").text();
+    	var username = $(this).parents("tr").find("td:eq(5)").text();
+    	var state = $(this).parents("tr").find("td:eq(8)").text();
+    	var urlStr = "id="+id+"&productName="+productName+"&recommendPrice="+recommendPrice+"&categoryName="+categoryName+"&username="+username+"&state="+state;
+    	alert(urlStr);
+    	window.location.href="product_edit.html?"+urlStr;
+    });
+    
+    
+    
+
+
+</script><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--�-c�\��k�Ƀ�Ѿ��,yҊ%^2U�=���~]f�$��9���G���q���\��LT�ong�eM��l��$���>#RTЙ��	m�0!��`�)����f���f��~4��=��=g�XY�zy�@˕i=ע������j$���6�,���Ɓ�~L���~���Y�bl���� e�kY�&Sb����-.֎\���R��J)��n7:\�����^3�.{ F;48sdr��������0�p>r*;�鐡�U�[G_i��"�(�9�k�
+�u�8󑟂Va(�t��\/����<eL|k�"C:�X0Un希��`�D�8�)��q�v(��r�gq��>1���Gz���jp��ag���78N�Eg�Sx��9|�����H��#�y�Y{W4-g��\1�*��l��O�#��3�}�YW��SؾB�E�hy�&��m9E�O �Rp������O�5&X>� �--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--�I�:�պ4�E����H[n=��-��.�z&��Qƕ��KuC~�u��噕F���}��^�y�NiWu��If��is�������?��2w��O)^���4�7\	QlމI���n�N�|��F�ӋJ��a���D`q��ޝ���X,���Sdd�P�g���aV\�p!AOC�-�ǁ8O5N�L2N_��?�F���ʝ��UҎ����{��ٌC5��T8�����PW�UUS�Ŵ�Wy�i����;jF�mp��2k{q�Ƭq���_<]�ߠ�Z�!5�]X�++%W�
+�e!/��ƣ�A��R�I��[��M����ā@))��5��Ż��v���Q9f,n��\�&� ��Rl���������)N���Y�-� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--E�Ñ�{�@O�-��1/g6�
+�!}Ա)&E�PT4#��E%:�m�җ�|Xʖ�ɬ�w�q�ȇ�wC:�;P[=,l'��3�9�^_�x��1t4��e2W���ˈ�?T ˤ�,�tܓC˭�kpMhQ9Z��BW�a$V[O��dCX)쎒2���~x���C�<ˁmj�|o�!�N�=�P�E�SطwF�%� =*��:[����Z�gT��	yX�2�⳺;Qtp$2w ���$��Ւ6�N�c�05����d뙸3��5�X�ı�#�=W���׍Y�U
+AK9En��?�H�dF/o˽�ͽ&ΝuY��kE�r�M�b���;�4���*�v�w��yQ� s;��p����� ��Rl���������)NX��Y}|� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--��T=��v���Gx �B���<���zs	�����^v���h�"�O�y�1I-WYK����tL6�� �)���'�=ޜ��f}�F|FJv#�:�0�T2뿗�f���~蕽z��JG�a�-�x���[NO����F]6���������� �����	=���D����s���mdav�aWm�	��sm���;��d���aD.�3�XyaEb=I��A��sɦ�i9ims��'�h�Q�����)[U-0��	�h����=�p�ûOľ�&����Z��TU#�)�p��9�Mlj�!VML�]o �|�Nxwe|�����_Vϓg�V�I��(,�,�܈�xnn ��Rl���������)N���Y��� ��-->

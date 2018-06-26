@@ -28,7 +28,7 @@
 	<form method="post">
 		<input type="text" name="username" placeholder="用户名" required="required" />
 		<input type="password" name="password" placeholder="密码" required="required" />
-		<button type="submit" class="btn btn-primary btn-block btn-large" id="loginSub">登录</button>
+		<button type="button" class="btn btn-primary btn-block btn-large" id="loginSub">登录</button>
 	</form>
 </div>
 </body>
@@ -48,7 +48,6 @@ $(function() {
 					 if(data != "" && data.code == 100){
 						 if(data.extend.state == '1'){
 							 alert("登录成功!");
-							 alert(data.extend.page);
 							 window.location.href = "/"+data.extend.page;//需要跳转的地址
 						 }
 						 if(data.extend.state == '2'){

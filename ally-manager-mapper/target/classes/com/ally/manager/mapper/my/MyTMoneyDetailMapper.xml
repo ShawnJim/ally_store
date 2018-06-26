@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ally.manager.mapper.my.MyTMoneyDetailMapper" >
+  <!-- 查询钱包审核信息分页 -->
+  <select id="selectMyMoneyDetail" resultType="com.ally.manager.pojo.my.MyTMoneyDetail">
+   SELECT 
+		u.username,
+		m.totalMoney,
+		mi.money,
+		mi.state,
+		mi.type
+	FROM
+		t_user u, t_money m,t_moneyInfo mi
+	WHERE u.state = 1 AND u.id = m.userId AND mi.moneyId = m.id <!-- AND u.roleId = #{roleId} -->
+  </select>
+  
+    <!-- 查询当前充值信息所对应的钱包信息 -->
+  <select id="selectNewMyMoneyDetail" resultType="com.ally.manager.pojo.my.MyTMoneyDetail">
+SELECT
+	m.totalMoney
+FROM t_money m 
+
+WHERE m.id = #{moneyId}
+  </select>
+  
+  <update id="updateMyMoneyDetail">
+  	
+UPDATE t_money m
+
+SET m.totalMoney = #{totalMoney}
+
+WHERE m.id = #{id}
+  </update>
+  
+  <!-- 新增钱包 -->
+    <insert id="insert">
+    insert into t_money ( userId)
+    values ( #{userId,jdbcType=INTEGER})
+  </insert>
+
+</mapper>

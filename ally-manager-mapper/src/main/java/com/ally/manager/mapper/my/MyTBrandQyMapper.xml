@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ally.manager.mapper.my.MyTBrandQyMapper" >
+  <!-- 查询品牌商 企业信息分页 -->
+  <select id="selectMyBrandQy" resultType="com.ally.manager.pojo.my.MyTBrandQy">
+    SELECT
+		u.id,
+		u.phone,
+		u.compellation,
+		u.register_time registerTime,
+		u.update_time updateTime,
+		u.state,
+		qy.companyName,
+		qy.address,
+		c.name
+	FROM
+		t_user u, t_brand_qy qy ,t_category c
+	WHERE u.roleId = 2 AND u.state = 1 AND u.id =qy.userId AND qy.categoryId = c.id
+  </select>
+ <!-- 根据用户名查询品牌商-企业信息 -->
+  <select id="selectMyBrandQyUserName" parameterType="string" resultType="com.ally.manager.pojo.my.MyTBrandQy">
+	
+		SELECT
+		u.id,
+		u.phone,
+		u.compellation,
+		u.register_time registerTime,
+		u.update_time updateTime,
+		u.state,
+		qy.companyName,
+		qy.address,
+		c.name
+	FROM
+		t_user u, t_brand_qy qy ,t_category c
+	WHERE u.roleId = 2 AND u.state = 1 AND u.id =qy.userId AND qy.categoryId = c.id AND qy.companyName =#{companyName}
+  </select>
+  
+  <!-- 单个删除品牌商-企业信息 -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		DELETE FROM t_user WHERE id = #{id}
+  </delete>
+  
+  <!-- 批量删除品牌商-企业信息 -->
+  <delete id="deleteBatchMyBrandQy" parameterType="java.util.List">
+  	DELETE FROM t_user WHERE id in
+	<foreach collection="list" item="ids" open="(" separator="," close=")">
+		#{ids}
+	</foreach>
+  </delete>
+  
+   <!-- 根据id更改品牌商-企业信息 -->
+  <update id="updateMyTBrandQy" parameterType="com.ally.manager.pojo.my.MyTBrandQy">
+  	UPDATE t_user u, t_brand_qy qy ,t_category c
+	SET
+		qy.companyName = #{companyName},
+		qy.address = #{address},
+		u.compellation = #{compellation},
+		u.phone = #{phone},
+		u.state = #{state}
+	WHERE u.roleId = 2 AND u.id = qy.userId AND u.id = #{id} 
+  </update>
+  
+</mapper>

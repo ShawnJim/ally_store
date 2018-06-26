@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ally.search.mapper.ItemMapper">
+<resultMap id="BaseResultMap" type="com.ally.search.po.Item" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="pro_name" property="pro_name" jdbcType="VARCHAR" />
+    <result column="picture" property="picture" jdbcType="VARCHAR" />
+    <result column="sell_point" property="sell_point" jdbcType="VARCHAR" />
+    <result column="s_Categoryid" property="s_Categoryid" jdbcType="INTEGER" />
+    <result column="f_Categoryid" property="f_Categoryid" jdbcType="INTEGER" />
+    <result column="price" property="price" jdbcType="REAL" />
+    <result column="cate_name" property="cate_name" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.ally.search.po.Item" extends="BaseResultMap" >
+    <result column="details" property="details" jdbcType="LONGVARCHAR" />
+  </resultMap>
+	<select id="getItemList" resultMap="ResultMapWithBLOBs">
+		select
+			p.id,
+			p.name as pro_name,
+			price,
+			picture,
+			sell_point,
+			details,
+			f_Categoryid,
+			s_Categoryid,
+			c.name AS cate_name
+		FROM
+			t_product p, t_category c
+		WHERE p.f_Categoryid = c.id
+			OR p.s_Categoryid = c.id
+	</select>
+</mapper>
