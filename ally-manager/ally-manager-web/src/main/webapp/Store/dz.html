@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/style.css" />
+    <script type="text/javascript" src="../Js/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="../Js/bootstrap.js"></script>
+    <script type="text/javascript" src="../Js/common.js"></script>
+    
+    <!-- 分页 -->
+    <script src="../Js/jqPaginator.min.js" type="text/javascript"></script>
+<!--     <script src="../Js/myPage.js" type="text/javascript"></script> -->
+    
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+        
+        .page_info_main>.page_info1{
+        	float:left;  
+    		width:40%;  
+    		height:100px;  
+    		line-height:75px;  
+        }
+       .page_info_main>.page_info2{
+  			float:left;  
+    		width:60%;  
+    		height:100px;  
+    		line-height:100px;  
+        }
+        
+
+
+    </style>
+</head>
+<body>
+<form class="form-inline definewidth m20">    
+    用户名称：
+    <input type="text" name="username" id="username"class="abc input-default" placeholder="" value="">&nbsp;&nbsp;  
+    <button type="button" class="btn btn-primary"id="selectStoreDz">查询</button>
+    &nbsp;&nbsp; <button type="button" class="btn btn-danger" id="deleteStoreDz-all">批量删除</button>
+</form>
+<table id="table_PageInfo" class="table table-bordered table-hover definewidth m10">
+</table>
+<div class="page_info_main">
+	<div id="page_info" class="page_info1" style="float: left;"></div>
+	<div class="page_info2" id="page_info2" style="float: left;">
+        <ul class="pagination" id="pagination">
+        </ul>
+        <input type="hidden" id="PageCount" />
+        <input type="hidden" id="PageSize" value="8" />
+        <input type="hidden" id="countindex"/>
+        
+        <input type="hidden" id="visiblePages" value="5" />
+	</div>
+</div>
+
+</body>
+</html>
+<script>
+
+function loadpage() {
+    var myPageCount = parseInt($("#PageCount").val());//总条目数
+    var myPageSize = parseInt($("#PageSize").val());//每页显示多少条数据
+    var countindex = myPageCount % myPageSize > 0 ? (myPageCount / myPageSize) + 1 : (myPageCount / myPageSize);
+    $("#countindex").val(countindex);
+    
+    
+
+    $.jqPaginator('#pagination', {
+        totalPages: parseInt($("#countindex").val()),	//分页的总页数
+        visiblePages: parseInt($("#visiblePages").val()),//每页最多显示多少页码
+        currentPage: 1,
+        first: '<li class="first"><a href="javascript:;">首页</a></li>',
+        prev: '<li class="prev"><a href="javascript:;"><i class="arrow arrow2"></i>上一页</a></li>',
+        next: '<li class="next"><a href="javascript:;">下一页<i class="arrow arrow3"></i></a></li>',
+        last: '<li class="last"><a href="javascript:;">末页</a></li>',
+        page: '<li class="page"><a href="javascript:;">{{page}}</a></li>',
+        onPageChange: function (num, type) {
+            if (type == "change") {
+                //exeData(num, type);
+            	$("#page_info").empty();//清空信息栏
+            	$("#table_PageInfo").empty();//清空表格
+        			$.ajax({
+        				  type: "POST",
+        				  url: "/back/MyStoreDzPage.do?page="+num+"&rows="+myPageSize,
+        				  success: function(data){
+        					  	$('#pagination').jqPaginator('option', {
+        					  		totalPages: data.pages//总页数
+        					  	});
+        						showPageInfo(data);
+        						showPageTable(data);
+        				  }
+        				});
+            	
+            }else{
+            	$("#page_info").empty();//清空信息栏
+            	$("#table_PageInfo").empty();//清空表格
+        			$.ajax({
+        				  type: "GET",
+        				  url: "/back/MyStoreDzPage.do?page="+num+"&rows="+myPageSize,
+        				  success: function(data){
+        					  	$('#pagination').jqPaginator('option', {
+        		                    totalPages: data.pages//总页数
+        		                });
+        						showPageInfo(data);
+        						showPageTable(data);
+        				  }
+        				});
+            }
+        }
+    });
+}
+$(function () {
+    loadData(1);
+    loadpage();
+});
+
+function loadData(num) {
+	$("#PageCount").val("9");	//一共多少条数据
+}
+
+
+/*function exeData(num, type) {
+    loadData(num);
+    loadpage();
+}*/
+
+//显示分页表格信息
+function showPageTable(data){
+	var state = "";
+	$("#table_PageInfo").append("<thead><tr><th><input type='checkbox' id='check_all'/></th><th>用户id</th><th>用户名称</th><th>密码</th><th>邮箱</th><th>电话</th><th>真实姓名</th><th>创建时间</th><th>更新时间</th><th>状态</th><th>操作</th></tr></thead>");
+	$.each(data.rows,function(i,item){
+		var registerTime = timestampToTime(item.registerTime);
+		var updateTime = timestampToTime(item.updateTime);
+		if(item.state == "1"){
+			state = "激活";
+		}else{
+			state = "冻结";
+		}
+		$("#table_PageInfo").append("<tr><td><input type='checkbox'  class='check_storeDz' /></td><td>"+item.id+"</td><td>"+item.username+"</td><td>"+item.password+"</td><td>"+item.email+"</td><td>"+item.phone+"</td><td>"+item.compellation+"</td><td>"+registerTime+"</td><td>"+updateTime+"</td><td>"+state+"</td><td><button type='button' class='btn btn-danger btn-sm delete-storeDz'>删除</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type='button' class='btn btn-info btn-sm edit-storeDz'>编辑</button></td></tr>");
+	});	
+}
+
+
+//显示分页信息栏
+function showPageInfo(data){
+	$("#page_info").append("<strong>&nbsp;&nbsp;&nbsp;&nbsp;共"+data.total+"条记录 &nbsp;"+data.pageNum+"/"+data.pages+"页 </strong>");
+}
+
+//日期格式化
+function timestampToTime(timestamp) {  
+    var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000  
+    Y = date.getFullYear() + '/';  
+    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '/';  
+    D = date.getDate() + ' ';  
+    h = date.getHours() + ':';  
+    m = date.getMinutes() + ':';  
+    s = date.getSeconds();  
+    return Y+M+D+h+m+s;  
+} 
+
+//对Date的扩展，将 Date 转化为指定格式的String  
+//    ===调用方法:
+//	    		var time2 = new Date().Format("yyyy-MM-dd HH:mm:ss");
+//  			alert(time2);
+// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，   
+// 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)   
+Date.prototype.Format = function (fmt) { //author: meizz   
+    var o = {  
+        "M+": this.getMonth() + 1, //月份   
+        "d+": this.getDate(), //日   
+        "H+": this.getHours(), //小时   
+        "m+": this.getMinutes(), //分   
+        "s+": this.getSeconds(), //秒   
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度   
+        "S": this.getMilliseconds() //毫秒   
+    };  
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));  
+    for (var k in o)  
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));  
+    return fmt;  
+}  
+	
+//单个删除
+$(document).on("click",".delete-storeDz",function(){
+	//var storeDzId = $(this).attr("id");
+	var storeDzId = $(this).parents("tr").find("td:eq(1)").text();
+	var storeDzName = $(this).parents("tr").find("td:eq(2)").text();
+	if(confirm("确认删除"+storeDzName+"吗？")){
+		$.ajax({
+			url:"/back/deleteMyStoreDz.do?ids="+storeDzId,
+			type:"DELETE",
+			success:function(data){
+				alert("删除成功");
+				//返回首页
+				window.location.href="dz.html";
+			}
+		});
+	}
+});
+
+
+
+$(document).on("click","#check_all",function(){
+	//attr获取checked是undefined;
+	//我们这些dom原生的属性;attr获取自定义属性的值;
+	//prop修改和读取dom原生属性的值
+	$(".check_storeDz").prop("checked",$(this).prop("checked"));
+	
+});
+
+
+
+$(document).on("click",".check_storeDz",function(){
+	//判断当前选择中的元素是否5个
+	var flag = $(".check_storeDz:checked").length==$(".check_storeDz").length;
+	$("#check_all").prop("checked",flag);
+	
+});
+	
+		
+		//点击全部删除,就批量
+		$("#deleteStoreDz-all").click(function(){
+			//员工名字
+			var storeDzNames = "";
+			//员工id
+			var del_idstr = "";
+			$.each($(".check_storeDz:checked"),function(){
+				storeDzNames += $(this).parents("tr").find("td:eq(2)").text()+",";
+				del_idstr += $(this).parents("tr").find("td:eq(1)").text()+"-";
+			});
+			//去除storeDzNames多余的,
+			storeDzNames = storeDzNames.substring(0,storeDzNames.length-1);
+			//去除del_idstr多余的-
+			del_idstr = del_idstr.substring(0,del_idstr.length-1);
+			
+			if(confirm("确认删除【"+storeDzNames+"】吗?")){
+				//发送ajax请求删除
+				$.ajax({
+					url:"/back/deleteMyStoreDz.do?ids="+del_idstr,
+					type:"DELETE",
+					success:function(result){
+						alert("删除成功");
+						//返回首页
+						window.location.href="dz.html";
+					},
+				});
+			}
+		});
+		
+    $(function () {
+    	
+    	//查询
+        $("#selectStoreDz").click(function(){
+        	var username = $("#username").val();
+        	$.ajax({
+    			url:"/back/selectMyStoreDz.do?username="+username,
+    			type:"POST",
+    			success:function(data){
+    				$("#page_info").empty();//清空信息栏
+                	$("#table_PageInfo").empty();//清空表格
+                	$("#page_info2").empty();//清空分页
+    				showPageTable(data);//显示查询的数据
+    				
+    			}
+    		});
+        	
+        });
+    	
+    	
+    	//显示查询的数据
+        function showPageTable(data){
+        	var state = "";
+        	
+        	$("#table_PageInfo").append("<thead><tr><th><input type='checkbox' id='check_all'/></th><th>用户id</th><th>用户名称</th><th>密码</th><th>邮箱</th><th>电话</th><th>真实姓名</th><th>创建时间</th><th>更新时间</th><th>状态</th><th>操作</th></tr></thead>");
+        	$.each(data.extend.list,function(i,item){
+        		var registerTime = timestampToTime(item.registerTime);
+        		var updateTime = timestampToTime(item.updateTime);
+        		if(item.state == "1"){
+        			state = "激活";
+        		}else{
+        			state = "冻结";
+        		}
+        		$("#table_PageInfo").append("<tr><td><input type='checkbox'  class='check_storeDz' /></td><td>"+item.id+"</td><td>"+item.username+"</td><td>"+item.password+"</td><td>"+item.email+"</td><td>"+item.phone+"</td><td>"+item.compellation+"</td><td>"+registerTime+"</td><td>"+updateTime+"</td><td>"+state+"</td><td><button type='button' class='btn btn-danger btn-sm delete-storeDz'>删除</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type='button' class='btn btn-info btn-sm edit-storeDz'>编辑</button></td></tr>");
+        	});	
+        }
+    		
+
+    });
+    
+    //向edit_dz页面传值
+    $(document).on("click",".edit-storeDz",function(){
+    	var id = $(this).parents("tr").find("td:eq(1)").text();
+    	var username = $(this).parents("tr").find("td:eq(2)").text();
+    	var password = $(this).parents("tr").find("td:eq(3)").text();
+    	var email = $(this).parents("tr").find("td:eq(4)").text();
+    	var phone = $(this).parents("tr").find("td:eq(5)").text();
+    	var compellation = $(this).parents("tr").find("td:eq(6)").text();
+    	var state = $(this).parents("tr").find("td:eq(9)").text();
+    	var urlStr = "id="+id+"&username="+username+"&password="+password+"&email="+email+"&phone="+phone+"&compellation="+compellation+"&state="+state;
+    	alert(urlStr);
+    	window.location.href="edit_dz.html?"+urlStr;
+    });
+    
+    
+    
+
+
+</script><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--c� �m-�=�~�[�AZ�C8�՞o�$c0�����1�dF$@`<����E[�YA��:8�� 	}�'�<L��l���ơC˕��H��ƜG�:�ѯ;��cT���	�T��Q�2���ܒ���A�+�H��T-^� ��	w�_�� 5�Y�p��p�t�S��˒�
+HΟ�/��@Ļ`���+���!���6�덎t�YOo/�br�s���1H��3�.]�/<j=���P�O�yo�����>_oU�5D�˴�L��Q�>�"�Z��	�8h�&&X�Q1mLF�Ԍ���f�`�9��lYj�����Ԡc!e��2�}�o�h��� ��Rr���������Nk
+�Yܞ� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--���*ˍ���M��2��Ϊ0g-�	W�gY��F��t��ևo���`�u�f5��cqJ�S��X9�l2���4-ë��I�gR;F���V2o�TzخFI��LL�#�$��jS�n�n�&��� �6M�����w��|��U���h+��4�ڗ�֍Ծ��]�'ό21� vo�&��U�Y͗¦��:�����|FD٨��ɭ��R�������U/�����dq!�m%�4�4aޠ��9��V�TS�G#s���QJ�f�72�&�R�������
+�G�EW�v<J�H0��	��*#�tF(j��\�28�������������r�n������/�A�V����#k���s������=F�M������ְD�_���u���~�vӿRTH���Ƣ\�>�q>9�®��z2�K����a�T3tW|܋�E�Z��cO���p�ЉH�sC�'3�����~!�>��q:b_�#���� ��Rr���������N�s�Yh1� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--2�;o�@<{v���y=G�<�.E:��'�_z<�=k pQ�5�20�XlV��{����{;I�	���o>a$�Ȏ��WR!C@<���(��o�ec�Fs]^�,o�āz��X��-����f�!	�*X���k��(��?\�em�.�-�8��c�a9�\���a� �2�*��ns`�/U���)(G+�8㐁���
+%~������2��bwe=1�߳���[��q��\3�@��$F����}\��~�?睅a�K�lߟ��#'�N6�U!���eą����bX	���N��f囨 ��Rr���������N�}�Yec� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--8�xW�����ҥ�f��hW5�ABw���ó\�^7ɉ�gӊ�e=�Q�\WX��~.��9���BF�q���H�UW���.]�V�Q����f�ͮ'���i&����Uy�^�\�7<���-��䥓����n��{%8�J ��� �-�#��ﵜcV(�.V��`�8�Qa55��@Y$�&��L�<)ٹ��U����ʮ���貒XM|�w�P��W�יͫ��~&XE�~���d}�C:�i]��5��/a.�G�j=��\T-ů� �cDv|��3����E{Ă:܈�,��j�8e��'+8���G�tYi�7=�������o`��G����*MjwGa\̀[u�)5UvG���jfتג� ��Rr���������N�b�Y��� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--O���~\mǡ!���*�l�	�jA�\��h;n��R��>����fы}�\-�1=�x
+Fc�� H�1crɬ�����Ay�E�a�R���P�����2Y�K�w��� b:י1��1�dFӯ�9���������%{���qL�]�{�IЦ\�����[�j:6�8��sf=x|�CT,��G���zӭU�Z|(q��sOun�>Q\
+��L��r�&[s�{��	�Oo�� �((%p���u�j��Q؉F�;�޶�&>M��Z!��*HM�E� Ar"Y@�ˍ7Xq/��n��,<8��Ί�A��W��(/��b�}[��㘽
+t�xQ-uϳ�ߤ�g� ��Rr���������N�D�Y��� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--^�M�]]B���W�����U�@e��-8pX��ʚ@r�h�D�o+��u�? b��l7%wu�����
+��ܶ}��vU�|ͥ�t�|�߼��bj�� s�/��g�̋m9�B��\�޲a��?N�t�A��n7�I]'��v��?{�X�V/�*�\<�<_bʻd��8ن�а��S23���&�C���N��I��cH�f~���w�k�n
+�� �v���)Z�+f�jO���i#	� јj��mѰ�'X��=��l��G���� �ROz��
+fpf�W \X�J���/ʒ�w��
+�"Xϲ���Lj� ̙�7��y,H��3: ���ʽ6�Ӫ�}x�P�6L��ޔ��jj�k���ױ�xS(�u�=�Ӡ��0�ћ����nz�tO\]VU+�>>�E��7����y���� ��Rr���������N-��Y-u� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--�G��!���W���2�/�;��c�&O�9�ZNe�j�]P� %T��$o9obxd�C�_s�i�r�~\�Y�Y�R@���Ęg	d��O٥�3��M����^�>y?�=	p5�H��(�@3�"g�O��S��i�;9܀����k�CH�(\Q`���zq��L�
+"c�>�O���u5y��]&�k4�3�}����*����?����je�S��e��tdW������LP����lJg����FՇ=x+��իOM�$��O�s�׷��I�د�Ə���$����=����"��0���6��^;JWD|����,�e�e�qZ���9~�O|O�5u�1Vv�T&���ߘy��-��VD1n�Rբ�P���r��D�Ӓ��������K��ݠ� g���f���o7������5�(� ��Rr���������N���YT�� ��-->

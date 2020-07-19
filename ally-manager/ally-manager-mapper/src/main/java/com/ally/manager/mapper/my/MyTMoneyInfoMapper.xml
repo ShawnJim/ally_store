@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ally.manager.mapper.my.MyTMoneyInfoMapper" >
+  <!-- 查询钱包审核信息分页 -->
+  <select id="selectMyMoneyInfo" resultType="com.ally.manager.pojo.my.MyTMoneyInfo">
+   SELECT 
+			m.number,
+			m.money,
+			u.userName,
+			m.time,
+			a.userName adminName,
+			m.auditTime,
+			m.state
+	FROM t_moneyInfo m , t_user u , t_admin a
+	WHERE m.userId = u.id AND m.adminId = a.id AND m.type = #{type}
+  </select>
+  
+    <!-- 查询钱包审核信息分页-状态 -->
+  <select id="selectMyMoneyInfoState" resultType="com.ally.manager.pojo.my.MyTMoneyInfo">
+ 	SELECT 
+			m.number,
+			m.money,
+			u.userName,
+			m.time,
+			a.userName adminName,
+			m.auditTime,
+			m.state
+	FROM t_moneyInfo m , t_user u , t_admin a
+	WHERE m.userId = u.id AND m.adminId = a.id AND m.state = #{state} AND m.type = #{type} 
+  </select>
+  
+   <!-- 单个冻结钱包充值信息 -->
+  <update id="freezeMoneyInfo">
+  	UPDATE t_moneyInfo m
+	SET m.state = 2
+	WHERE m.number = #{id}
+  </update>
+  <!-- 批量冻结钱包信息 -->
+  <update id="freezeBatchMoneyInfo"  parameterType="java.util.List">
+  	UPDATE t_moneyInfo m
+	SET m.state = 2
+	WHERE m.number in
+	<foreach collection="list" item="ids" open="(" separator="," close=")">
+		#{ids}
+	</foreach>
+  </update>
+
+   <!-- 单个通过钱包充值信息 -->
+  <update id="passMoneyInfo">
+  	UPDATE t_moneyInfo m
+	SET m.state = 1
+	WHERE m.number = #{id}
+  </update>
+  <!-- 批量通过钱包信息 -->
+  <update id="passBatchMoneyInfo"  parameterType="java.util.List">
+  	UPDATE t_moneyInfo m
+	SET m.state = 1
+	WHERE m.number in
+	<foreach collection="list" item="ids" open="(" separator="," close=")">
+		#{ids}
+	</foreach>
+  </update>
+    <!-- 根据条件查询钱包充值信息分页 -->
+  <select id="selectMoneys" resultType="com.ally.manager.pojo.my.MyTMoneyInfo">
+   SELECT 
+   			m.moneyId,
+			m.number,
+			m.money,
+			u.userName,
+			m.time,
+			a.userName adminName,
+			m.auditTime,
+			m.state
+	FROM t_moneyInfo m , t_user u , t_admin a
+	WHERE m.userId = u.id AND m.adminId = a.id AND m.type = #{type} AND m.number = #{number}
+  </select>
+  
+</mapper>

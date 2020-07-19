@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/style.css" />
+    <script type="text/javascript" src="../Js/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="../Js/bootstrap.js"></script>
+    <script type="text/javascript" src="../Js/common.js"></script>
+    
+    <!-- 分页 -->
+    <script src="../Js/jqPaginator.min.js" type="text/javascript"></script>
+<!--     <script src="../Js/myPage.js" type="text/javascript"></script> -->
+    
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+        
+        .page_info_main>.page_info1{
+        	float:left;  
+    		width:40%;  
+    		height:100px;  
+    		line-height:75px;  
+        }
+       .page_info_main>.page_info2{
+  			float:left;  
+    		width:60%;  
+    		height:100px;  
+    		line-height:100px;  
+        }
+        
+
+
+    </style>
+</head>
+<body>
+<form class="form-inline definewidth m20">    
+    用户名称：
+    <input type="text" name="username" id="username"class="abc input-default" placeholder="" value="">&nbsp;&nbsp;  
+    <button type="button" class="btn btn-primary"id="selectAdmins">查询</button>
+    &nbsp;&nbsp; <button type="button" class="btn btn-success" id="addnew">新增用户</button>
+    &nbsp;&nbsp; <button type="button" class="btn btn-danger" id="deleteAdmin-all">批量删除</button>
+</form>
+<table id="table_PageInfo" class="table table-bordered table-hover definewidth m10">
+</table>
+<div class="page_info_main">
+	<div id="page_info" class="page_info1" style="float: left;"></div>
+	<div class="page_info2" id="page_info2" style="float: left;">
+        <ul class="pagination" id="pagination">
+        </ul>
+        <input type="hidden" id="PageCount" />
+        <input type="hidden" id="PageSize" value="8" />
+        <input type="hidden" id="countindex"/>
+        
+        <input type="hidden" id="visiblePages" value="5" />
+	</div>
+</div>
+
+</body>
+</html>
+<script>
+
+function loadpage() {
+    var myPageCount = parseInt($("#PageCount").val());//总条目数
+    var myPageSize = parseInt($("#PageSize").val());//每页显示多少条数据
+    var countindex = myPageCount % myPageSize > 0 ? (myPageCount / myPageSize) + 1 : (myPageCount / myPageSize);
+    $("#countindex").val(countindex);
+    
+    
+
+    $.jqPaginator('#pagination', {
+        totalPages: parseInt($("#countindex").val()),	//分页的总页数
+        visiblePages: parseInt($("#visiblePages").val()),//每页最多显示多少页码
+        currentPage: 1,
+        first: '<li class="first"><a href="javascript:;">首页</a></li>',
+        prev: '<li class="prev"><a href="javascript:;"><i class="arrow arrow2"></i>上一页</a></li>',
+        next: '<li class="next"><a href="javascript:;">下一页<i class="arrow arrow3"></i></a></li>',
+        last: '<li class="last"><a href="javascript:;">末页</a></li>',
+        page: '<li class="page"><a href="javascript:;">{{page}}</a></li>',
+        onPageChange: function (num, type) {
+            if (type == "change") {
+                //exeData(num, type);
+            	$("#page_info").empty();//清空信息栏
+            	$("#table_PageInfo").empty();//清空表格
+        			$.ajax({
+        				  type: "GET",
+        				  url: "/back/adminPage.do?page="+num+"&rows="+myPageSize,
+        				  success: function(data){
+        					  	$('#pagination').jqPaginator('option', {
+        					  		totalPages: data.pages//总页数
+        					  	});
+        						showPageInfo(data);
+        						showPageTable(data);
+        				  }
+        				});
+            	
+            }else{
+            	$("#page_info").empty();//清空信息栏
+            	$("#table_PageInfo").empty();//清空表格
+        			$.ajax({
+        				  type: "GET",
+        				  url: "/back/adminPage.do?page="+num+"&rows="+myPageSize,
+        				  success: function(data){
+        					  	$('#pagination').jqPaginator('option', {
+        		                    totalPages: data.pages//总页数
+        		                });
+        						showPageInfo(data);
+        						showPageTable(data);
+        				  }
+        				});
+            }
+        }
+    });
+}
+$(function () {
+    loadData(1);
+    loadpage();
+});
+
+function loadData(num) {
+	$("#PageCount").val("9");	//一共多少条数据
+}
+
+
+/*function exeData(num, type) {
+    loadData(num);
+    loadpage();
+}*/
+
+//显示分页表格信息
+function showPageTable(data){
+	var state = "";
+	$("#table_PageInfo").append("<thead><tr><th><input type='checkbox' id='check_all'/></th><th>用户id</th><th>用户名称</th><th>密码</th><th>真实姓名</th><th>邮箱</th><th>创建时间</th><th>更新时间</th><th>状态</th><th>操作</th></tr></thead>");
+	$.each(data.rows,function(i,item){
+		var registerTime = timestampToTime(item.registerTime);
+		var updateTime = timestampToTime(item.updateTime);
+		if(item.state == "1"){
+			state = "激活";
+		}else{
+			state = "冻结";
+		}
+		$("#table_PageInfo").append("<tr><td><input type='checkbox'  class='check_admin' /></td><td>"+item.id+"</td><td>"+item.username+"</td><td>"+item.password+"</td><td>"+item.name+"</td><td>"+item.email+"</td><td>"+registerTime+"</td><td>"+updateTime+"</td><td>"+state+"</td><td><button type='button' class='btn btn-danger btn-sm delete-admin'>删除</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type='button' class='btn btn-info btn-sm edit-admin'>编辑</button></td></tr>");
+	});	
+}
+
+
+//显示分页信息栏
+function showPageInfo(data){
+	$("#page_info").append("<strong>&nbsp;&nbsp;&nbsp;&nbsp;共"+data.total+"条记录 &nbsp;"+data.pageNum+"/"+data.pages+"页 </strong>");
+}
+
+//日期格式化
+function timestampToTime(timestamp) {  
+    var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000  
+    Y = date.getFullYear() + '/';  
+    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '/';  
+    D = date.getDate() + ' ';  
+    h = date.getHours() + ':';  
+    m = date.getMinutes() + ':';  
+    s = date.getSeconds();  
+    return Y+M+D+h+m+s;  
+} 
+
+//对Date的扩展，将 Date 转化为指定格式的String  
+//    ===调用方法:
+//	    		var time2 = new Date().Format("yyyy-MM-dd HH:mm:ss");
+//  			alert(time2);
+// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，   
+// 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)   
+Date.prototype.Format = function (fmt) { //author: meizz   
+    var o = {  
+        "M+": this.getMonth() + 1, //月份   
+        "d+": this.getDate(), //日   
+        "H+": this.getHours(), //小时   
+        "m+": this.getMinutes(), //分   
+        "s+": this.getSeconds(), //秒   
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度   
+        "S": this.getMilliseconds() //毫秒   
+    };  
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));  
+    for (var k in o)  
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));  
+    return fmt;  
+}  
+	
+//单个删除
+$(document).on("click",".delete-admin",function(){
+	//var adminId = $(this).attr("id");
+	var adminId = $(this).parents("tr").find("td:eq(1)").text();
+	var adminName = $(this).parents("tr").find("td:eq(2)").text();
+	if(confirm("确认删除"+adminName+"吗？")){
+		$.ajax({
+			url:"/back/deleteAdmin.do?ids="+adminId,
+			type:"DELETE",
+			success:function(data){
+				alert("删除成功");
+				//返回首页
+				window.location.href="index.html";
+			}
+		});
+	}
+});
+
+
+
+$(document).on("click","#check_all",function(){
+	//attr获取checked是undefined;
+	//我们这些dom原生的属性;attr获取自定义属性的值;
+	//prop修改和读取dom原生属性的值
+	$(".check_admin").prop("checked",$(this).prop("checked"));
+	
+});
+
+
+
+$(document).on("click",".check_admin",function(){
+	//判断当前选择中的元素是否5个
+	var flag = $(".check_admin:checked").length==$(".check_admin").length;
+	$("#check_all").prop("checked",flag);
+	
+});
+	
+		
+		//点击全部删除,就批量
+		$("#deleteAdmin-all").click(function(){
+			//员工名字
+			var adminNames = "";
+			//员工id
+			var del_idstr = "";
+			$.each($(".check_admin:checked"),function(){
+				adminNames += $(this).parents("tr").find("td:eq(2)").text()+",";
+				del_idstr += $(this).parents("tr").find("td:eq(1)").text()+"-";
+			});
+			//去除adminNames多余的,
+			adminNames = adminNames.substring(0,adminNames.length-1);
+			//去除del_idstr多余的-
+			del_idstr = del_idstr.substring(0,del_idstr.length-1);
+			
+			if(confirm("确认删除【"+adminNames+"】吗?")){
+				//发送ajax请求删除
+				$.ajax({
+					url:"/back/deleteAdmin.do?ids="+del_idstr,
+					type:"DELETE",
+					success:function(result){
+						alert("删除成功");
+						//返回首页
+						window.location.href="index.html";
+					},
+				});
+			}
+		});
+		
+    $(function () {
+    	
+    	//查询
+        $("#selectAdmins").click(function(){
+        	var username = $("#username").val();
+        	$.ajax({
+    			url:"/back/selectAdmin.do?username="+username,
+    			type:"POST",
+    			success:function(data){
+    				$("#page_info").empty();//清空信息栏
+                	$("#table_PageInfo").empty();//清空表格
+                	$("#page_info2").empty();//清空分页
+    				showPageTable(data);//显示查询的数据
+    				
+    			}
+    		});
+        	
+        });
+    	
+    	
+    	//显示查询的数据
+        function showPageTable(data){
+        	var state = "";
+        	
+        	$("#table_PageInfo").append("<thead><tr><th><input type='checkbox' id='check_all'/></th><th>用户id</th><th>用户名称</th><th>密码</th><th>真实姓名</th><th>邮箱</th><th>创建时间</th><th>更新时间</th><th>状态</th><th>操作</th></tr></thead>");
+        	$.each(data.extend.list,function(i,item){
+        		var registerTime = timestampToTime(item.registerTime);
+        		var updateTime = timestampToTime(item.updateTime);
+        		if(item.state == "1"){
+        			state = "激活";
+        		}else{
+        			state = "冻结";
+        		}
+        		/*$("#table_PageInfo").append("<thead><tr><th>用户id</th><th>用户名称</th><th>密码</th><th>真实姓名</th><th>邮箱</th><th>最后登录时间</th><th>状态</th><th>操作</th></tr></thead>");*/
+        		$("#table_PageInfo").append("<tr><td><input type='checkbox'  class='check_admin' /></td><td>"+item.id+"</td><td>"+item.username+"</td><td>"+item.password+"</td><td>"+item.name+"</td><td>"+item.email+"</td><td>"+registerTime+"</td><td>"+updateTime+"</td><td>"+state+"</td><td><button type='button' class='btn btn-danger btn-sm delete-admin'>删除</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type='button' class='btn btn-info btn-sm edit-admin'>编辑</button></td></tr>");
+        	});	
+        }
+    		
+		$('#addnew').click(function(){
+
+				window.location.href="add.html";
+		 });
+
+
+    });
+    
+    //向edit页面传值
+    $(document).on("click",".edit-admin",function(){
+    	var id = $(this).parents("tr").find("td:eq(1)").text();
+    	var username = $(this).parents("tr").find("td:eq(2)").text();
+    	var password = $(this).parents("tr").find("td:eq(3)").text();
+    	var name = $(this).parents("tr").find("td:eq(4)").text();
+    	var email = $(this).parents("tr").find("td:eq(5)").text();
+    	var state = $(this).parents("tr").find("td:eq(8)").text();
+    	var urlStr = "id="+id+"&username="+username+"&password="+password+"&name="+name+"&email="+email+"&state="+state;
+    	window.location.href="edit.html?"+urlStr;
+    });
+    
+    
+    
+
+
+</script><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--� �*Y!�.$���WVB3��5�l��a�!&Ii6�~����l��q��ك�,��P�2���}�m�{�������弋3[&Ũuʀie$��u����L0ҨŭehM��*���aDX��`b�t4���;Q:y� S��s5]�Yl4��1ǚ���l�X�$��;+o@��9x�+ٞW���]�#Q ��Zo
+�H�#��p6��֠�os_Uec�D���r�Q5~Hyv�89�d� �>
+�D��um�l�DP��*�&<�0�ok���+��"R��f���F�)��C��p	�18����%Mw�]ڲX�N 0{c����JR�}��QҰQj��$ɪ� ���J��)5����IzZ|���	*��5�E ��R{���������+N{��Y0�� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--�G-;Wѳ9��0��EF�t�LŹ����%o�W<U!&��2��; O�NW�% .��x=�|np���ܔ:*�э%�;�
+<2Nk�$p��>U�0JƋ#03|��m�Z[H���x� �a�"�0�Ky�	3J9� �7�[7�ɴ����k���(7Q}���6���$�ΐi��t��ن��A�UðC�9�f{��FRIǙ�.�ie�;�{)�#���Ü��.�d����Jtt#d�l�������8��9�չ�%�M�G�_s�/���ȓ�v��
+(���Cd���\��~��vuc�2K���uA�1Ίs�P��Z��tG����Р�&��Q���mA�),U�#����81�%࿇&ާ�oa�����D���]�TȲ� -���'e�KX��/�,"��FJ��i�e����t1~� ��Ry���������?N��YK�� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--�-1j��Rb��%e� �4�K=<\i�>��փ�㐐�b�W��ȟ�a��_�/^��J�<�����ڱNJ�3�p�xY�VNI��%U�)�֤�6[�߬�ɾu�V87;xO�T�~��d>����WI�U�y���޵u� �'����W!WM�Ӷ�@n�Ļ(��jF��+�_��s��1a�iDͷ�	 J���S\���Z��#K�lw�Y��`^X�����b
+�f(�����_YEU	�fIi���R�<��V�mU��P��O0C/v-B�u���"��d�xwY�F��3M ᣠ#�ߒ�f�#밪(����"�z���ĕ��6r��jXH�!&�
+S-k���d[TN�� �rr�>�w¯�f �n�8����Ma��x�1 ��Ry���������?N/9�Y�� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--�P��P��Ԁ�u�ahJH>���t:.�#9��̦^V��fN�b7�q��Ϸ��@;��ez6ʻi�p�=.��Ä��g*���~@CC�k����:�D٠e�(�jb�UC�-#������o��4��r\�H�I?w6u�\�}�V��r���f���b�5���B
+���e&�x)"Ѡ�P�� Ks��,������Jw�}���ɴ�3VMF(Zcb�U}ΐ���2Ac%i(�s��pP�m݁�ʒ�D��L�~ �1��k��������{@Kn��´�v�$��G�b�*F��g"k��cʛ�-�[�ۚD��b ��Ry���������Nc	�Yp�� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--Ύ����(�9�B�	J!G�Jr(=z��gP����/���.?8���}�'9~���bX�91�٫�f<f�+�]~-T�J���g�n}'���'Ɗiw�Wu���6b�at>��BˏTf���4�0�%7%o|SԻC�r �n�b�W��५R���s����+�L=�z�����ˌiT��D����I2�'�,�=B&'��e2Dg�8q��^��2y���QF<�av�_�����y��@�A�HEAB
+H"��!��9 w�
+�h5��-��6v���!ٔ!��7dB�@N[��GsQ�tMtk?�-���!�Q��a2����Ȳh���3��ʗG�s٬:5�� b\b'Y\9��s��&���U����` ��]���ބ�i3`�^���� ��X�7��Hl��vv�7����	�&���>�.�L"��]$�����;-�n�� ��Ry���������N�y�Y��� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--/�9V�1���b�Vx0��{y� L�U��[�K��n�G�%,&c�f�E�����l��{�$ u%���[�j2_Nm9�U�]{ø��cٲzj+S{�A@6�.쇝��t����Q�S�����G����»PqR���D7����p�unu�W1T_-+��f�3���L���d��� Ka�O$R�ɀ����MK�ua:��/0��hmD��3�+��8��w�N�z��ݬ�+lb�K�����}gE
+gd=&ȣP���l��`�BU YS��Ih,�1���]���"I�p��|��������9$�p�U	s�.���`Q�-���>�u^�>�eu��J%��Ꮫ�: ��Ry���������N*n�Y�
+� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--V���m񃷀��~M�(&�u�uC��al�Z��1||D�����I)N����oҞ��̀D���ǩ�r�L���U����,�p�D��14-��'(�7��̆�Yo�2��	����|�����nx��&!;��:2��؎����-;#�Ѯ�-@��(�8��/H���=��>���w����O���}�5�J�4۔�w�>���_�iG�xǝ�oY.s�N��d /��x.��@�#88��1�)CF�n+�?w$�ƙ)a�M�� N�տ�$}�uX�E��!N�I&����ke������a>Jgg�v%��1��M�XN|��1�7�F�{k�@�ec2]͗Q���9� ��Rp���������/N���Y�� ��-->

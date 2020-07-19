@@ -1,0 +1,193 @@
+@charset "utf-8";
+/*=========================start==========================*/
+body,h1,h2,h3,h4,h5,h6,div,p,dl,dt,dd,ol,ul,li,form,table,th,td,a,img,span,strong,var,em,input,textarea,select,option{margin: 0; padding: 0;}
+html,body{font-family:"宋体","微软雅黑",Arail,Tabhoma; font-size: 12px; text-align: left;}
+ul,ol{list-style: none;}
+img{border: 0;}
+input,select,textarea{outline:0;}
+textarea{resize:none;}
+table{border-collapse: collapse; border-spacing: 0;}
+th,strong,var,em{font-weight: normal; font-style: normal;}
+a{text-decoration: none;}
+/*a:link,a:visited,a:hover,a:active{text-decoration:none;} */
+/*==========================End===========================*/
+
+
+.topNav{
+	width: 100%;
+	height: 35px;
+	font: 13px/35px "宋体";
+	background-color: #F1F1F1;
+	border-bottom: 1px solid #ededee;
+}
+.to{
+	width: 1090px;
+	margin: 0 auto;
+}
+.topNav .ri{
+	float: right;
+}
+.topNav li{
+	float: left;
+	text-align: center;
+    height: 35px;
+    padding:0 2px;
+    list-style: none;
+}
+.topNav li a{
+	color: #9A949B;
+	text-decoration: none;
+}
+.topNav li .sep{
+	width: 1px;
+    height: 12px;
+    padding: 0;
+    color: #ddd;
+    overflow: hidden;
+}
+
+.glyphicon-tags{
+	color:#9A949B;
+	font-size: 12px;
+}
+.glyphicon-shopping-cart,.glyphicon-heart,.glyphicon-user{
+	color:#9A949B;
+}
+.ce{
+	width: 100%;
+	height: 100px;
+	margin: 0 auto;
+	background: #FFFFFF;
+	position: relative;
+}
+.ce h1{/*logo文字*/
+	padding-left:410px;
+	font: 50px/100px "arial black";
+}
+
+.search{/*搜索框的内容*/
+	width: 515px;
+	height: 40px;
+	position: absolute;
+	top: 30px;
+	left: 780px;
+}
+#keyword{
+	width: 380px;
+	height: 40px;
+	font: 14px "arial black" ;
+	border: 2px solid #101010;
+	padding: 0 15px;
+}
+.sea-text{
+	float: left;
+}
+.sea-btn{
+	display: inline-block;
+	height: 40px;
+	line-height: 40px;
+	width: 55px;
+	background: #101010;
+	text-align: center;
+	border-radius: 0 3px 3px 0;
+}
+.glyphicon-search{
+	color: #fff;
+	font-size: 23px;
+	line-height: 40px;
+	
+}
+.sortBox{
+	width: 100%;
+	height: 44px;
+	background: #FFFFFF;
+	border-bottom: 3px solid #101010;
+}
+.sortCen{
+	width:1100px;
+	height: 44px;
+	margin: 0 auto;
+}
+/*  商品分类的div样式  */
+#sort{
+	width: 160px;
+	height: 44px;
+	display: inline-block;
+	background: #101010;
+	color: #fff;
+	float: left;
+	text-align: center;
+	font: 15px/44px "宋体";
+}
+.glyphicon-menu-hamburger{
+	padding-right: 3px;
+}
+
+/*全部分类旁边的导航*/
+.sortRig{
+	float: left;
+	width: 300px;
+	margin-left: 20px;
+	height: 44px;
+}
+.sortRig li{
+	line-height: 44px;
+	text-align: center;
+	padding:0 20px;
+	float: left;
+}
+.sortRig a{
+	font:bold 16px "微软雅黑";
+	color: #101010;
+	text-decoration: none;
+}
+/*鼠标放上去才会展开的产品分类div样式*/
+#comSortLe{
+	display: none;
+	position: absolute;
+	z-index: 100;
+	margin-left: 400px;
+	background-color: #101010;
+	filter:alpha(Opacity=80);
+	-moz-opacity:0.8;
+	opacity: 0.8;
+}
+#comSortLe li{
+	width: 160px;
+	height: 44px;
+	line-height: 44px;
+	padding:0 12px ;
+}
+#comSortLe a{
+	width: 160px;
+	height: 44px;
+	color: #FFFFFF;
+	font-size: 15px;
+	text-decoration: none;
+}
+/*商品分类的右边那个div*/
+#comSortRi-one{
+	display: none;
+	position: absolute;
+	z-index: 100;
+	line-height: 44px;
+	background-color: #101010;
+	width: 900px;
+	height: 450px;
+	margin-left:560px ;
+	filter:alpha(Opacity=80);
+	-moz-opacity:0.8;
+	opacity: 0.8;
+}
+#comSortRi-one a{
+	width: 200px;
+	height: 44px;
+	line-height: 44px;
+	padding:0 10px ;/* 
+	width: 100px;
+	height: 40px; */
+	color: #FFFFFF;
+	font-size: 15px;
+	text-decoration: none;
+	float: left;
+}

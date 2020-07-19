@@ -1,0 +1,16 @@
+body { margin: 0; padding: 0; color: #444; font-size: 12px; font-family: tahoma, arial, 'Hiragino Sans GB', 'Microsoft Yahei'; }
+ul, li, h1, h2, h3, h4, h5, h6, p { margin: 0; padding: 0; font-weight: normal; }
+li { list-style: none; }
+img { display: block; border: 0; }
+a { color: #444; text-decoration: none; }
+.container { width: 1200px; margin: 0 auto; }
+.clearfix:after { content: " "; display: block; clear: both; }
+.filter { padding-top: 15px; padding-bottom: 15px; background: #f9fbfe }
+.filter .box { padding: 24px; border: 1px solid #dcdcdc; background-color: #fff }
+.filter .title-h { font-size: 14px; border-bottom: 1px solid #dcdcdc; padding-bottom: 10px }
+.filter dl { position: relative; margin-bottom: 10px }
+.filter dl:after { content: ""; display: block; clear: both }
+.filter dl dt { position: absolute; top: 0; left: 0; font-weight: 700 }
+.filter dl dd { padding-left: 40px }
+.filter dl dd a { margin-right: 20px; margin-bottom: 10px; display: inline-block }
+.filter dl dd a.on { font-weight: 700; color: #477fd2 }

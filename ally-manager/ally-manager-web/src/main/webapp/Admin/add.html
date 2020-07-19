@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/style.css" />
+    <script type="text/javascript" src="../Js/jquery.js"></script>
+    <script type="text/javascript" src="../Js/bootstrap.js"></script>
+<!--     <script type="text/javascript" src="../Js/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="../Js/messages_zh.min.js"></script> -->
+    <script type="text/javascript" src="../Js/common.js"></script>
+
+ 
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+<form method="post" class="definewidth m20">
+<table class="table table-bordered table-hover definewidth m10">
+    <tr>
+        <td width="10%" class="tableleft">ç™»å½•å</td>
+        <td><input type="text" name="username" id ="username" placeholder="(6-16ä½,ç”±å­—æ¯å’Œæ•°å­—ç»„æˆ)" />&nbsp;&nbsp;<span id="check_username"><span></td>
+        
+    </tr>
+    <tr>
+        <td class="tableleft">å¯†ç </td>
+        <td><input type="text" name="password" id="password" placeholder="(6-16ä½,ç”±å­—æ¯å’Œæ•°å­—ç»„æˆ)"/>&nbsp;&nbsp;<span id="check_password"><span></td>
+    </tr>
+    <tr>
+        <td class="tableleft">çœŸå®å§“å</td>
+        <td><input type="text" name="name" id="name" placeholder="å¼ ä¸‰"/>&nbsp;&nbsp;<span id="check_name"><span></td>
+    </tr>
+    <tr>
+        <td class="tableleft">é‚®ç®±</td>
+        <td><input type="text" name="email" id="email" placeholder="xxx@163.com"/>&nbsp;&nbsp;<span id="check_email"><span></td>
+    </tr>
+    <tr>
+        <td class="tableleft">çŠ¶æ€</td>
+        <td>
+            <input type="radio" name="state" value="1" checked/> æ¿€æ´»
+           <input type="radio" name="state" value="2"/> å†»ç»“
+        </td>
+    </tr>
+    <tr>
+        <td class="tableleft">è§’è‰²</td>
+        <td>ç®¡ç†å‘˜</td>
+    </tr>
+    <tr>
+        <td class="tableleft"></td>
+        <td>
+            <button class="btn btn-primary" type="button" id="save">ä¿å­˜</button> &nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">è¿”å›åˆ—è¡¨</button>
+        </td>
+    </tr>
+</table>
+</form>
+</body>
+</html>
+<script>
+    $(function () {
+    	
+    	//éªŒè¯ç”¨æˆ·åæ˜¯å¦ä¸ºç©º
+    	$("#username").blur(function(){
+    		var username = this.value;
+    		if(username == null || username == ""){  
+                $("#check_username").text("è¯·è¾“å…¥ç”¨æˆ·å");  
+                $("#check_username").css("color","red");  
+            } else{ 
+            	$("#check_username").text("");
+            	checkUsername();//éªŒè¯ç”¨æˆ·åæ˜¯å¦å­˜åœ¨
+            	checkUser()//éªŒè¯ç”¨æˆ·åæ ¼å¼
+            }
+    		
+    	});
+    	
+    	//éªŒè¯é‚®ç®±æ˜¯å¦ä¸ºç©º
+    	$("#email").blur(function(){
+    		var email = this.value;
+    		if(email == null || email == ""){  
+                $("#check_email").text("è¯·è¾“å…¥é‚®ç®±");  
+                $("#check_email").css("color","red");  
+            } else{ 
+            	$("#check_email").text("");
+            	checkEmail();//éªŒè¯é‚®ç®±æ ¼å¼
+            }
+    		
+    	});
+    	
+    	//éªŒè¯å¯†ç æ˜¯å¦ä¸ºç©º
+    	$("#password").blur(function(){
+    		var email = this.value;
+    		if(email == null || email == ""){  
+                $("#check_password").text("è¯·è¾“å…¥å¯†ç ");  
+                $("#check_password").css("color","red");  
+            } else{ 
+            	$("#check_password").text("");
+            	checkPass();//éªŒè¯å¯†ç æ ¼å¼
+            }
+    		
+    	});
+    	
+    	//éªŒè¯å§“åæ˜¯å¦ä¸ºç©º
+    	$("#name").blur(function(){
+    		var email = this.value;
+    		if(email == null || email == ""){  
+                $("#check_name").text("è¯·è¾“å…¥å§“å");  
+                $("#check_name").css("color","red");  
+            } else{ 
+            	$("#check_name").text("");
+            	checkName();//éªŒè¯å¯†ç æ ¼å¼
+            }
+    		
+    	});
+    	
+    	
+    	
+    	
+    	
+		$("#save").click(function(){
+				/* var registerTime = new Date().Format("yyyy-MM-dd HH:mm:ss");
+				alert(registerTime); */
+			
+				if($("#check_username").text()!="" || $("#check_password").text()!="" || $("#check_email").text()!="" || $("#check_name").text()!=""){
+					alert("æœªèƒ½æ­£ç¡®å¡«å†™ä¿¡æ¯,è¯·ä¿®æ”¹åæäº¤!");
+				}
+				else if(checkFrom()==false){
+					alert("è¯·å¡«å†™å®Œæ•´!");
+				}else{
+				/* alert($("form").serialize()); */
+				$.ajax({
+  				  type: "POST",
+  				  data:$("form").serialize(),
+  				  dataType:"json",
+  				  url: "/back/insertAdmin.do",
+  				  success: function(data){
+  					  	alert("æ·»åŠ ç®¡ç†å‘˜æˆåŠŸ!");
+  					  //setTimeout("window.location.href='index.html'",5000);
+  					  window.location.href="index.html";
+  				  }
+  				});
+				}
+		 });
+		
+		
+		//éªŒè¯è¡¨å•
+		function checkFrom(){
+			if($("#password").val() == "" || $("#name").val() == "" || $("#email").val() == ""){
+				return false;
+			} 
+			return true;
+		}
+		
+		//éªŒè¯ç”¨æˆ·åæ˜¯å¦é‡å¤
+		function checkUsername(){
+			$.ajax({
+				  type: "POST",
+				  data:$("form").serialize(),
+				  dataType:"json",
+				  url: "/back/checkInsertAdmin.do",
+				  success: function(data){
+					  if(data.code == 200){
+						  $("#check_username").html("è´¦å·å·²å­˜åœ¨,è¯·é‡æ–°è¾“å…¥");
+						  $("#check_username").css("color","red");
+					  }
+				  }
+				});
+		}
+		
+		//éªŒè¯ç”¨æˆ·åæ ¼å¼
+		function checkUser(){
+			var username = $("#username").val();
+			var reg = "^[a-zA-Z]{1}([a-zA-Z0-9]|[._]){3,15}$";
+			if(!username.match(reg)){
+				 $("#check_username").html("ç”¨æˆ·åæ ¼å¼é”™è¯¯,è¯·é‡æ–°è¾“å…¥");
+				 $("#check_username").css("color","red");
+			}
+		}
+		
+		//éªŒè¯é‚®ç®±æ ¼å¼
+		function checkEmail(){
+			var email = $("#email").val();
+			var reg = "^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$";
+			if(!email.match(reg)){
+				 $("#check_email").html("é‚®ç®±æ ¼å¼é”™è¯¯,è¯·é‡æ–°è¾“å…¥");
+				 $("#check_email").css("color","red");
+			}
+			
+		}
+		
+		//éªŒè¯å¯†ç æ ¼å¼
+		function checkPass(){
+			var pass = $("#password").val();
+			var reg = "^[a-zA-Z]{1}([a-zA-Z0-9]|[._]){5,15}$";
+			if(!pass.match(reg)){
+				 $("#check_password").html("å¯†ç æ ¼å¼é”™è¯¯,è¯·é‡æ–°è¾“å…¥");
+				 $("#check_password").css("color","red");
+			}
+		}
+		
+		//éªŒè¯å§“å
+		function checkName(){
+			var name =$("#name").val();
+			var reg = "[a-zA-Z]{1,20}|[\u4e00-\u9fa5]{1,10}";
+			if(!name.match(reg)){
+				 $("#check_name").html("å§“åæ ¼å¼é”™è¯¯,è¯·é‡æ–°è¾“å…¥");
+				 $("#check_name").css("color","red");
+			}
+			
+		}
+		
+		$("#backid").click(function(){
+			window.location.href="index.html";
+		});
+		
+		
+		
+		
+		
+    });
+    
+    Date.prototype.Format = function (fmt) { //author: meizz   
+	    var o = {  
+	        "M+": this.getMonth() + 1, //æœˆä»½   
+	        "d+": this.getDate(), //æ—¥   
+	        "H+": this.getHours(), //å°æ—¶   
+	        "m+": this.getMinutes(), //åˆ†   
+	        "s+": this.getSeconds(), //ç§’   
+	        "q+": Math.floor((this.getMonth() + 3) / 3), //å­£åº¦   
+	        "S": this.getMilliseconds() //æ¯«ç§’   
+	    };  
+	    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));  
+	    for (var k in o)  
+	    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));  
+	    return fmt;  
+	}
+    
+    
+</script><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--ï¿½ï¿½)ï¿½Mbï¿½lBï¿½Mï¿½ï¿½ï¿½#ï¿½+ï¿½ï¿½ï¿½tCï¿½Sï¿½ï¿½cç‘°ï¿½ï¿½Cï¿½ï¿½ï¿½Arï¿½Rï¿½Ã¥ï¿½zLï¿½9*ï¿½ï¿½ï¿½ï¿½AÓš!ï¿½oCİNg`ï¿½ï¿½ï¿½Sï¿½}ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½x>ï¿½ï¿½ï¿½Åšï¿½dï¿½ï¿½[WZqï¿½)4AGÇŠ{ï¿½ï¿½ï¿½\`ï¿½ï¿½ï¿½!Ü—ï¿½Dmï¿½<ï¿½ï¿½ï¿½#q]P@ï¿½ï¿½ï¿½ï¿½ï¿½'ï¿½=ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½#ï¿½p ZTï¿½ï¿½ÎÉ·ï¿½ï¿½]zï¿½C(ï¿½ßŸï¿½ï¿½ï¿½Ojwï¿½iï¿½ pÑ¤0ï¿½ï¿½m$ï¿½ï¿½qa1hjtï¿½ï¿½ï¿½/ï¿½bï¿½ï¿½i1ï¿½|cXï¿½ï¿½ï¿½nï¿½&ï¿½ï¿½ï¿½Kï¿½ï¿½ï¿½Fï¿½_H_sôˆœšï¿½	 ï¿½ï¿½1ï¿½ï¿½*{Ò˜ï¿½ï¿½ï¿½ï¿½Bï¿½mï¿½{ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½%ï¿½ï¿½ï¿½<	ï¿½ï¿½ï¿½Fï¿½I	ï¥¬2@[`ï¿½ï¿½AXï¿½ï¿½MPï¿½ï¿½Zï¿½hï¿½dJï¿½:KZï¿½udï¿½ï¿½/ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½wV,ï¿½ï¿½ï¿½ï¿½5ï¿½ï¿½2ï¿½ï¿½Mï¿½ï¿½R\ï¿½]ï¿½ï¿½Ñ»ï¿½<ï¿½mZï¿½lï¿½ï¿½5ï¿½sï¿½2}Cï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½9ï¿½=6è³¯ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½\ï¿½8ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½*ï¿½/pï¿½ï¿½ï¿½,ï¿½Yfï¿½ï¿½Lï¿½ï¿½ï¿½NKï¿½JQ+ß’ÓŸï¿½$r ï¿½ï¿½Ryï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?Nï¿½ï¿½ï¿½Yï¿½ï¿½ ï¿½ï¿½--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--W$NJï¿½ï¿½ï¿½8ï¿½ï¿½ŞjvDï¿½Ã¡ï¿½E!ï¿½ï¿½ï¿½Ô“Î¦ï¿½K3ï¿½ ï¿½kï¿½	ï¿½wjï¿½:'PTï¿½eï¿½rgï¿½ï¿½ï¿½ï¿½Wï¿½exï¿½f<ï¿½ï¿½ï¿½ï¿½	0hï¿½3g7 ï¿½8@tï¿½H	ï¿½Jï¿½mï¿½ï¿½pï¿½ JK"ï¿½j3ï¿½:ï¿½v&ï¿½/èŸ—sï¿½3ï¿½2iï¿½ï¿½gG<#ï¿½ï¿½jï¿½iï¿½Aï¿½_×ï¿½ï¿½ï¿½CE*ï¿½ï¿½+ï¿½ï¿½>$%ï¿½ ~ï¿½^9h<ï¿½ï¿½ï¿½ï¿½.ï¿½ï¿½fï¿½Cï¿½ï¿½Ç½ï¿½lpï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Oï¿½Í»xï¿½ï¿½ï¿½ï¿½I-6w)fw<ï¿½ï¿½sï¿½Mï¿½FB"ï¿½ï¿½-hï¿½ï¿½.ï¿½"gVbï¿½ï¿½#ï¿½ï¿½ï¿½k+ï¿½Â„ï¿½ï¿½Öƒ7q5ï¿½
+ï¿½ï¿½qï¿½ï¿½afï¿½ ï¿½ï¿½[ï¿½?ï¿½ï¿½.Pï¿½ï¿½N&kVï¿½ï¿½lSï¿½I;ï¿½!ï¿½ï¿½ï¿½3ï¿½É­^wï¿½ï¿½ç„»ï¿½ï¿½ :ï¿½ï¿½z<ï¿½!×´ï¿½ _ï¿½y%8>^ï¿½ï¿½ï¿½jï¿½5ï¿½aUCbï¿½ßï¿½ï¿½YNrhkï¿½qRï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ ï¿½Sï¿½ï¿½ï¿½nrQg9ï¿½ï¿½İ¾&ï¿½ï¿½m&ï¿½ï¿½f_jï¿½+ï¿½iï¿½ ï¿½ï¿½Ryï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?Nf)ï¿½Yï¿½ï¿½ ï¿½ï¿½--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--RJWï¿½?sï¿½ï¿½0ï¿½ï¿½ï¿½Ñ’ï¿½ï¿½y%F{ï¿½/ß¦Twï¿½]ZZï¿½`0ï¿½ï¿½%ï¿½Dï¿½ï¿½s7$gU% ï¿½jsï¿½=Fï¿½ï¿½P'nï¿½ï¿½+>ï¿½avkqx#nï¿½}ï¿½ï¿½ï¿½*6ï¿½ï¿½?eãˆ®ï¿½ï¿½siï¿½ï¿½Íšï¿½î„¡kï¿½ÄŠ?,Nï¿½$;ï¿½>A+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½<>ï¿½XE7ï¿½rï¿½ï¿½ï¿½ï¿½ï¿½.~ï¿½ï¿½ï¿½,ï¿½ï¿½tï¿½ï¿½]/@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½9Õ¨z48ï¿½ï¿½Ieï¿½=ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!ï¿½dï¿½ï¿½ï¿½&ï¿½Ú¯ï¿½ï¿½ï¿½ï¿½ï¿½;ï¿½w ï¿½Vï¿½b}lï¿½Hï¿½ï¿½~ï¿½6ï¿½ï¿½:_$ï¿½Qï¿½Gï¿½{	zlï¿½]ï¿½qï¿½8Ò ï¿½eï¿½ï¿½ï¿½Ãƒ{"r-Yï¿½|dï¿½ï¿½ï¿½ï¿½ï¿½è xï¿½ï¿½Ò­*ï¿½ï¿½ï¿½dï¿½ï¿½ï¿½/ï¿½Qï¿½2ï¿½ï¿½&ï¿½ï¿½ï¿½"ï¿½Mwï¿½ï¿½\ï¿½ï¿½ï¿½wï¿½İ˜ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½S'ï¿½gï¿½:hï¿½lÜ¿};ï¿½HOPï¿½\y	ï¿½ï¿½ ï¿½ï¿½Rvï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,Nï¿½ï¿½ï¿½Y5wï¿½ ï¿½ï¿½--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--ï¿½ï¿½DIï¿½;ï¿½Dï¿½ï¿½R@7ï¿½cy`Oï¿½ï¿½ï¿½R3É¢Î”dï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Qï¿½Qï¿½Ï°JÙŒUï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½<;n+Wï¿½dï¿½ï¿½ï¿½! rï¿½sï¿½*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½ï¿½ï¿½Fï¿½ï¿½ï¿½ï¿½ï¿½pTy
+ï¿½Ô”Iï¿½oï¿½ï¿½$ï¿½ï¿½ï¿½Rï¿½%ï¿½eï¿½ï¿½Fï¿½#ï¿½ï¿½ï¿½ï¿½Qï¿½Yï¿½ï¿½1ï¿½kï¿½Ó•{Uï¿½eSï¿½ï¿½ï¿½ï¿½T;ï¿½ï¿½ï¿½ï¿½kï¿½3ï¿½hï¿½ï¿½ï¿½ï¿½kDï¿½ï¿½ï¿½#Dï¿½ï¿½=Ú‰ï¿½7gG=ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½/áŠ9ï¿½yï¿½ï¿½i LD0ï¿½ï¿½Qï¿½ï¿½9 ï¿½Rï¿½ï¿½ï¿½O6Cï¿½:ï¿½]ï¿½6Ü”ï¿½"
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½T|ï¿½ï¿½ï¿½ï¿½` ï¿½/ï¿½ZHï¿½ï¿½Waï¿½ï¿½×¶YL2ï¿½`ï¿½ï¿½ï¿½_ï¿½ =ï¿½9Iï¿½ï¿½ï¿½Bï¿½c	ï¿½ï¿½?ï¿½ï¿½Bï¿½ï¿½oï¿½ ï¿½{+Z@]ï¿½ï¿½ï¿½ï¿½& ßï¿½ï¿½ï¿½ï¿½+,WYï¿½}
+ï¿½ï¿½Uï¿½ï¿½MWï¿½X>ï¿½aqIW!Åšï¿½ï¿½q~ï¿½"">%gï¿½ï¿½7ï¿½ï¿½ï¿½W&yï¿½ï¿½ï¿½ï¿½dIï¿½ï¿½ï¿½ï¿½ï¿½)Gï¿½^tC!LZï¿½ï¿½ï¿½Eï¿½Bï¿½ï¿½Gï¿½ ï¿½ï¿½Ryï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Nc	ï¿½Y=ï¿½ï¿½ ï¿½ï¿½--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--$¼?j½†£iØçª’*Ú”ÒZÉmİáàho.æëmç±}B¸³-{šn±W¥•,WÉÛ«ã'~ƒT{êì|8¥şÚ}Ğ§ìxñ7rFîœÂ%zÚ›SŒÜ›N„Ú÷‰{’ñ°î¦W›üÕ«…+ŒtÛß~›0•«CÌ)‚	m€I"CF›ô|ö°9‡úm¤ci’øO~KÜ5›Ú2Ó}WÑËó_ï_pt²s-–°›„à¸L…^/^Å àãqïÍƒRW¦V"‰	«`É3c‡Nò~;3ü5˜™‚0JÕ’:œLJê48Æ°|B2¿¡4Ë„s¨®nÂ•ÙYğ³Uît¡šE¨6
+ÃpôÙh*^d=`²FZÎá& ZÊF#îÑí8)äàû\ìHÀà<ùÍ›£ Öé¿av±jÂçÕXO…zø-§ñíOjş»!ßvË“b{T¬¡DóÊ,¶%Ğ|úJŸoÒ¥ÂDJwí¹ĞPûzÍI€½5uÂœ¾O4ä§q wõXäÄ ºÀRyÛøºÀºÀºÀ÷N*n×Y@ŞÍ ºÀ-->

@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ally.rest.mapper.TProductMapper" >
+  <resultMap id="BaseResultMap" type="com.ally.rest.po.TProduct" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="shelfTime" property="shelftime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="color" property="color" jdbcType="VARCHAR" />
+    <result column="sku" property="sku" jdbcType="VARCHAR" />
+    <result column="sku_status" property="skuStatus" jdbcType="INTEGER" />
+    <result column="picture" property="picture" jdbcType="VARCHAR" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="size" property="size" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="REAL" />
+    <result column="sell_point" property="sellPoint" jdbcType="VARCHAR" />
+    <result column="recommendPrice" property="recommendprice" jdbcType="VARCHAR" />
+    <result column="s_Categoryid" property="sCategoryid" jdbcType="INTEGER" />
+    <result column="wareHouseID" property="warehouseid" jdbcType="INTEGER" />
+    <result column="f_Categoryid" property="fCategoryid" jdbcType="INTEGER" />
+    <result column="userID" property="userid" jdbcType="INTEGER" />
+    <result column="t_Categoryid" property="tCategoryid" jdbcType="INTEGER" />
+    <result column="price" property="price" jdbcType="REAL" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.ally.rest.po.TProduct" extends="BaseResultMap" >
+    <result column="details" property="details" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, name, shelfTime, update_time, color, sku, sku_status, picture, quantity, size, 
+    weight, sell_point, recommendPrice, s_Categoryid, wareHouseID, f_Categoryid, userID, 
+    t_Categoryid, price
+  </sql>
+  <sql id="Blob_Column_List" >
+    details
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.ally.rest.po.TProductExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ally.rest.po.TProductExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_product
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_product
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ally.rest.po.TProductExample" >
+    delete from t_product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ally.rest.po.TProduct" >
+    insert into t_product (id, name, shelfTime, 
+      update_time, color, sku, 
+      sku_status, picture, quantity, 
+      size, weight, sell_point, 
+      recommendPrice, s_Categoryid, wareHouseID, 
+      f_Categoryid, userID, t_Categoryid, 
+      price, details)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{shelftime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{color,jdbcType=VARCHAR}, #{sku,jdbcType=VARCHAR}, 
+      #{skuStatus,jdbcType=INTEGER}, #{picture,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, 
+      #{size,jdbcType=VARCHAR}, #{weight,jdbcType=REAL}, #{sellPoint,jdbcType=VARCHAR}, 
+      #{recommendprice,jdbcType=VARCHAR}, #{sCategoryid,jdbcType=INTEGER}, #{warehouseid,jdbcType=INTEGER}, 
+      #{fCategoryid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{tCategoryid,jdbcType=INTEGER}, 
+      #{price,jdbcType=REAL}, #{details,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ally.rest.po.TProduct" >
+    insert into t_product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="shelftime != null" >
+        shelfTime,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="color != null" >
+        color,
+      </if>
+      <if test="sku != null" >
+        sku,
+      </if>
+      <if test="skuStatus != null" >
+        sku_status,
+      </if>
+      <if test="picture != null" >
+        picture,
+      </if>
+      <if test="quantity != null" >
+        quantity,
+      </if>
+      <if test="size != null" >
+        size,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="sellPoint != null" >
+        sell_point,
+      </if>
+      <if test="recommendprice != null" >
+        recommendPrice,
+      </if>
+      <if test="sCategoryid != null" >
+        s_Categoryid,
+      </if>
+      <if test="warehouseid != null" >
+        wareHouseID,
+      </if>
+      <if test="fCategoryid != null" >
+        f_Categoryid,
+      </if>
+      <if test="userid != null" >
+        userID,
+      </if>
+      <if test="tCategoryid != null" >
+        t_Categoryid,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="details != null" >
+        details,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="shelftime != null" >
+        #{shelftime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="color != null" >
+        #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="sku != null" >
+        #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="skuStatus != null" >
+        #{skuStatus,jdbcType=INTEGER},
+      </if>
+      <if test="picture != null" >
+        #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null" >
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="size != null" >
+        #{size,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=REAL},
+      </if>
+      <if test="sellPoint != null" >
+        #{sellPoint,jdbcType=VARCHAR},
+      </if>
+      <if test="recommendprice != null" >
+        #{recommendprice,jdbcType=VARCHAR},
+      </if>
+      <if test="sCategoryid != null" >
+        #{sCategoryid,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseid != null" >
+        #{warehouseid,jdbcType=INTEGER},
+      </if>
+      <if test="fCategoryid != null" >
+        #{fCategoryid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="tCategoryid != null" >
+        #{tCategoryid,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=REAL},
+      </if>
+      <if test="details != null" >
+        #{details,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ally.rest.po.TProductExample" resultType="java.lang.Integer" >
+    select count(*) from t_product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_product
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shelftime != null" >
+        shelfTime = #{record.shelftime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.color != null" >
+        color = #{record.color,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sku != null" >
+        sku = #{record.sku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.skuStatus != null" >
+        sku_status = #{record.skuStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.picture != null" >
+        picture = #{record.picture,jdbcType=VARCHAR},
+      </if>
+      <if test="record.quantity != null" >
+        quantity = #{record.quantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.size != null" >
+        size = #{record.size,jdbcType=VARCHAR},
+      </if>
+      <if test="record.weight != null" >
+        weight = #{record.weight,jdbcType=REAL},
+      </if>
+      <if test="record.sellPoint != null" >
+        sell_point = #{record.sellPoint,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recommendprice != null" >
+        recommendPrice = #{record.recommendprice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sCategoryid != null" >
+        s_Categoryid = #{record.sCategoryid,jdbcType=INTEGER},
+      </if>
+      <if test="record.warehouseid != null" >
+        wareHouseID = #{record.warehouseid,jdbcType=INTEGER},
+      </if>
+      <if test="record.fCategoryid != null" >
+        f_Categoryid = #{record.fCategoryid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userid != null" >
+        userID = #{record.userid,jdbcType=INTEGER},
+      </if>
+      <if test="record.tCategoryid != null" >
+        t_Categoryid = #{record.tCategoryid,jdbcType=INTEGER},
+      </if>
+      <if test="record.price != null" >
+        price = #{record.price,jdbcType=REAL},
+      </if>
+      <if test="record.details != null" >
+        details = #{record.details,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update t_product
+    set id = #{record.id,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      shelfTime = #{record.shelftime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      color = #{record.color,jdbcType=VARCHAR},
+      sku = #{record.sku,jdbcType=VARCHAR},
+      sku_status = #{record.skuStatus,jdbcType=INTEGER},
+      picture = #{record.picture,jdbcType=VARCHAR},
+      quantity = #{record.quantity,jdbcType=INTEGER},
+      size = #{record.size,jdbcType=VARCHAR},
+      weight = #{record.weight,jdbcType=REAL},
+      sell_point = #{record.sellPoint,jdbcType=VARCHAR},
+      recommendPrice = #{record.recommendprice,jdbcType=VARCHAR},
+      s_Categoryid = #{record.sCategoryid,jdbcType=INTEGER},
+      wareHouseID = #{record.warehouseid,jdbcType=INTEGER},
+      f_Categoryid = #{record.fCategoryid,jdbcType=INTEGER},
+      userID = #{record.userid,jdbcType=INTEGER},
+      t_Categoryid = #{record.tCategoryid,jdbcType=INTEGER},
+      price = #{record.price,jdbcType=REAL},
+      details = #{record.details,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_product
+    set id = #{record.id,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      shelfTime = #{record.shelftime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      color = #{record.color,jdbcType=VARCHAR},
+      sku = #{record.sku,jdbcType=VARCHAR},
+      sku_status = #{record.skuStatus,jdbcType=INTEGER},
+      picture = #{record.picture,jdbcType=VARCHAR},
+      quantity = #{record.quantity,jdbcType=INTEGER},
+      size = #{record.size,jdbcType=VARCHAR},
+      weight = #{record.weight,jdbcType=REAL},
+      sell_point = #{record.sellPoint,jdbcType=VARCHAR},
+      recommendPrice = #{record.recommendprice,jdbcType=VARCHAR},
+      s_Categoryid = #{record.sCategoryid,jdbcType=INTEGER},
+      wareHouseID = #{record.warehouseid,jdbcType=INTEGER},
+      f_Categoryid = #{record.fCategoryid,jdbcType=INTEGER},
+      userID = #{record.userid,jdbcType=INTEGER},
+      t_Categoryid = #{record.tCategoryid,jdbcType=INTEGER},
+      price = #{record.price,jdbcType=REAL}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ally.rest.po.TProduct" >
+    update t_product
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="shelftime != null" >
+        shelfTime = #{shelftime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="color != null" >
+        color = #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="sku != null" >
+        sku = #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="skuStatus != null" >
+        sku_status = #{skuStatus,jdbcType=INTEGER},
+      </if>
+      <if test="picture != null" >
+        picture = #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null" >
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="size != null" >
+        size = #{size,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=REAL},
+      </if>
+      <if test="sellPoint != null" >
+        sell_point = #{sellPoint,jdbcType=VARCHAR},
+      </if>
+      <if test="recommendprice != null" >
+        recommendPrice = #{recommendprice,jdbcType=VARCHAR},
+      </if>
+      <if test="sCategoryid != null" >
+        s_Categoryid = #{sCategoryid,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseid != null" >
+        wareHouseID = #{warehouseid,jdbcType=INTEGER},
+      </if>
+      <if test="fCategoryid != null" >
+        f_Categoryid = #{fCategoryid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        userID = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="tCategoryid != null" >
+        t_Categoryid = #{tCategoryid,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=REAL},
+      </if>
+      <if test="details != null" >
+        details = #{details,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.ally.rest.po.TProduct" >
+    update t_product
+    set name = #{name,jdbcType=VARCHAR},
+      shelfTime = #{shelftime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      color = #{color,jdbcType=VARCHAR},
+      sku = #{sku,jdbcType=VARCHAR},
+      sku_status = #{skuStatus,jdbcType=INTEGER},
+      picture = #{picture,jdbcType=VARCHAR},
+      quantity = #{quantity,jdbcType=INTEGER},
+      size = #{size,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=REAL},
+      sell_point = #{sellPoint,jdbcType=VARCHAR},
+      recommendPrice = #{recommendprice,jdbcType=VARCHAR},
+      s_Categoryid = #{sCategoryid,jdbcType=INTEGER},
+      wareHouseID = #{warehouseid,jdbcType=INTEGER},
+      f_Categoryid = #{fCategoryid,jdbcType=INTEGER},
+      userID = #{userid,jdbcType=INTEGER},
+      t_Categoryid = #{tCategoryid,jdbcType=INTEGER},
+      price = #{price,jdbcType=REAL},
+      details = #{details,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ally.rest.po.TProduct" >
+    update t_product
+    set name = #{name,jdbcType=VARCHAR},
+      shelfTime = #{shelftime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      color = #{color,jdbcType=VARCHAR},
+      sku = #{sku,jdbcType=VARCHAR},
+      sku_status = #{skuStatus,jdbcType=INTEGER},
+      picture = #{picture,jdbcType=VARCHAR},
+      quantity = #{quantity,jdbcType=INTEGER},
+      size = #{size,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=REAL},
+      sell_point = #{sellPoint,jdbcType=VARCHAR},
+      recommendPrice = #{recommendprice,jdbcType=VARCHAR},
+      s_Categoryid = #{sCategoryid,jdbcType=INTEGER},
+      wareHouseID = #{warehouseid,jdbcType=INTEGER},
+      f_Categoryid = #{fCategoryid,jdbcType=INTEGER},
+      userID = #{userid,jdbcType=INTEGER},
+      t_Categoryid = #{tCategoryid,jdbcType=INTEGER},
+      price = #{price,jdbcType=REAL}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

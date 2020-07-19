@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ally.manager.mapper.my.MyTStoreDzMapper" >
+  <!-- 查询分销商 店主信息分页 -->
+  <select id="selectMyStoreDz" resultType="com.ally.manager.pojo.my.MyTStoreDz">
+    SELECT 
+		u.id,
+		u.userName,
+		u.password,
+		u.phone,
+		u.email,
+		u.compellation,
+		u.register_time registerTime,
+		u.update_time updateTime,
+		u.state
+	FROM
+		t_user u
+	WHERE u.roleId = 3 AND u.state = 1
+  </select>
+  
+  <!-- 根据用户名查询分销商-店主信息 -->
+  <select id="selectMyStoreDzUserName" parameterType="string" resultType="com.ally.manager.pojo.my.MyTStoreDz">
+	SELECT 
+		u.id,
+		u.userName,
+		u.password,
+		u.phone,
+		u.email,
+		u.compellation,
+		u.register_time registerTime,
+		u.update_time updateTime,
+		u.state
+	FROM
+		t_user u
+	WHERE u.roleId = 3 AND u.state = 1 AND u.userName = #{username}
+  </select>
+  
+    <!-- 单个删除分销商-店主信息 -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		DELETE FROM t_user WHERE id = #{id}
+  </delete>
+  
+  <!-- 批量删除分销商-店主信息 -->
+  <delete id="deleteBatchMyStoreDz" parameterType="java.util.List">
+  	DELETE FROM t_user WHERE id in
+	<foreach collection="list" item="ids" open="(" separator="," close=")">
+		#{ids}
+	</foreach>
+  </delete>
+    <!-- 根据id更改分销商-店主信息 -->
+  <update id="updateMyTStoreDz" parameterType="com.ally.manager.pojo.my.MyTStoreDz">
+  	UPDATE t_user u
+	SET 
+		u.password = #{password},
+		u.email = #{email},
+		u.phone = #{phone},
+		u.compellation = #{compellation},
+		u.state = #{state}
+	WHERE u.id = #{id} AND u.roleId = 3 
+  </update>
+</mapper>

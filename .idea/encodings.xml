@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-common/target/classes/META-INF/maven/com.ally/ally-common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-manager" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-manager-mapper" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-manager-mapper/target/classes/META-INF/maven/com.ally/ally-manager-mapper" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-manager-pojo" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-manager-pojo/target/classes/META-INF/maven/com.ally/ally-manager-pojo" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-manager-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-manager-service/target/classes/META-INF/maven/com.ally/ally-manager-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-manager-web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-manager-web/target/m2e-wtp/web-resources/META-INF/maven/com.ally/ally-manager-web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-manager/ally-manager-mapper" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-manager/ally-manager-pojo" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-manager/ally-manager-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-manager/ally-manager-web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-parent" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-portal" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-portal-store" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-portal-store/target/m2e-wtp/web-resources/META-INF/maven/com.ally/ally-portal-store" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-portal/target/m2e-wtp/web-resources/META-INF/maven/com.ally/ally-portal" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-rest" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-rest/bin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-rest/target/m2e-wtp/web-resources/META-INF/maven/com.ally/ally-rest" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-search" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-search/bin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-search/bin/target/m2e-wtp/web-resources/META-INF/maven/com.ally/ally-search" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-search/target/m2e-wtp/web-resources/META-INF/maven/com.ally/ally-search" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-sso" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-sso/bin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ally-sso/target/m2e-wtp/web-resources/META-INF/maven/com.ally/ally-sso" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>

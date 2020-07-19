@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/style.css" />
+    <script type="text/javascript" src="../Js/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="../Js/bootstrap.js"></script>
+    <script type="text/javascript" src="../Js/common.js"></script>
+    
+    <!-- 分页 -->
+    <script src="../Js/jqPaginator.min.js" type="text/javascript"></script>
+<!--     <script src="../Js/myPage.js" type="text/javascript"></script> -->
+    
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+        
+        .page_info_main>.page_info1{
+        	float:left;  
+    		width:40%;  
+    		height:100px;  
+    		line-height:75px;  
+        }
+       .page_info_main>.page_info2{
+  			float:left;  
+    		width:60%;  
+    		height:100px;  
+    		line-height:100px;  
+        }
+        
+		.status{
+        	position:absolute;
+			right:16%;
+        }
+
+    </style>
+</head>
+<body>
+<form class="form-inline definewidth m20">    
+    用户名称：
+    <input type="text" name="username" id="username"class="abc input-default" placeholder="" value="">&nbsp;&nbsp;  
+    <button type="button" class="btn btn-primary"id="selectStoreDzCheck">查询</button>
+    &nbsp;&nbsp; <button type="button" class="btn btn-danger" id="freezeStoreDz-all">批量冻结</button>
+    &nbsp;&nbsp; <button type="button" class="btn btn-success" id="passStoreDz-all">批量通过</button>
+    &nbsp;&nbsp;
+    <!-- Single button -->
+	<div class="btn-group status">
+  		<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    	审核状态 <span class="caret"></span>
+  		</button>
+  		<ul class="dropdown-menu">
+    		<li><a href="javascript:void(0);">待审核</a></li>
+    		<li role="separator" class="divider"></li>
+    		<li><a href="javascript:void(0);">已通过</a></li>
+    		<li role="separator" class="divider"></li>
+    		<li><a href="javascript:void(0);">已冻结</a></li>
+  		</ul>
+	</div>
+</form>
+<table id="table_PageInfo" class="table table-bordered table-hover definewidth m10">
+</table>
+<div class="page_info_main">
+	<div id="page_info" class="page_info1" style="float: left;"></div>
+	<div class="page_info2" id="page_info2" style="float: left;">
+        <ul class="pagination" id="pagination">
+        </ul>
+        <input type="hidden" id="PageCount" />
+        <input type="hidden" id="PageSize" value="8" />
+        <input type="hidden" id="countindex"/>
+        
+        <input type="hidden" id="visiblePages" value="5" />
+	</div>
+</div>
+
+</body>
+</html>
+<script>
+
+function loadpage() {
+    var myPageCount = parseInt($("#PageCount").val());//总条目数
+    var myPageSize = parseInt($("#PageSize").val());//每页显示多少条数据
+    var countindex = myPageCount % myPageSize > 0 ? (myPageCount / myPageSize) + 1 : (myPageCount / myPageSize);
+    $("#countindex").val(countindex);
+    
+    
+
+    $.jqPaginator('#pagination', {
+        totalPages: parseInt($("#countindex").val()),	//分页的总页数
+        visiblePages: parseInt($("#visiblePages").val()),//每页最多显示多少页码
+        currentPage: 1,
+        first: '<li class="first"><a href="javascript:;">首页</a></li>',
+        prev: '<li class="prev"><a href="javascript:;"><i class="arrow arrow2"></i>上一页</a></li>',
+        next: '<li class="next"><a href="javascript:;">下一页<i class="arrow arrow3"></i></a></li>',
+        last: '<li class="last"><a href="javascript:;">末页</a></li>',
+        page: '<li class="page"><a href="javascript:;">{{page}}</a></li>',
+        onPageChange: function (num, type) {
+        	//点击审核状态事件
+            $("ul > li").click(function(){
+            	$("#page_info").empty();//清空信息栏
+                $("#table_PageInfo").empty();//清空表格
+                var states = $(this).html().substring(30,33);
+                 if(states == "待审核"){
+                 	states = 0;
+                 }else if(states == "已通过"){
+                 	states = 1;
+                 }else{
+                 	states = 2;
+                 } 
+             	$.ajax({
+
+         			  type: "GET",
+         			  url: "/back/MyStoreDzCheckPageState.do?page="+num+"&rows="+myPageSize+"&states="+states,
+         			  success: function(data){
+ 					  	$('#pagination').jqPaginator('option', {
+ 					  		totalPages: data.pages//总页数
+ 					  	});
+ 						showPageInfo(data);
+ 						showPageTable(data);
+ 				  		}
+         			});
+                
+             });
+        	
+            if (type == "change") {
+                //exeData(num, type);
+            	$("#page_info").empty();//清空信息栏
+            	$("#table_PageInfo").empty();//清空表格
+        			$.ajax({
+        				  type: "POST",
+        				  url: "/back/MyStoreDzCheckPage.do?page="+num+"&rows="+myPageSize,
+        				  success: function(data){
+        					  	$('#pagination').jqPaginator('option', {
+        					  		totalPages: data.pages//总页数
+        					  	});
+        						showPageInfo(data);
+        						showPageTable(data);
+        				  }
+        				});
+            	
+            }else{
+            	$("#page_info").empty();//清空信息栏
+            	$("#table_PageInfo").empty();//清空表格
+        			$.ajax({
+        				  type: "GET",
+        				  url: "/back/MyStoreDzCheckPage.do?page="+num+"&rows="+myPageSize,
+        				  success: function(data){
+        					  	$('#pagination').jqPaginator('option', {
+        		                    totalPages: data.pages//总页数
+        		                });
+        						showPageInfo(data);
+        						showPageTable(data);
+        				  }
+        				});
+            }
+        }
+    });
+}
+$(function () {
+    loadData(1);
+    loadpage();
+});
+
+function loadData(num) {
+	$("#PageCount").val("9");	//一共多少条数据
+}
+
+
+/*function exeData(num, type) {
+    loadData(num);
+    loadpage();
+}*/
+
+//显示分页表格信息
+function showPageTable(data){
+	var state = "";
+	$("#table_PageInfo").append("<thead><tr><th><input type='checkbox' id='check_all'/></th><th>用户id</th><th>用户名称</th><th>邮箱</th><th>电话</th><th>真实姓名</th><th>创建时间</th><th>更新时间</th><th>状态</th><th>操作</th></tr></thead>");
+	$.each(data.rows,function(i,item){
+		var registerTime = timestampToTime(item.registerTime);
+		var updateTime = timestampToTime(item.updateTime);
+		if(item.state == "0"){
+			state = "待审核";
+		}else if(item.state == "1"){
+			state = "已通过";
+		}else{
+			state = "已冻结";
+		}
+		$("#table_PageInfo").append("<tr><td><input type='checkbox'  class='check_storeDz' /></td><td>"+item.id+"</td><td>"+item.username+"</td><td>"+item.email+"</td><td>"+item.phone+"</td><td>"+item.compellation+"</td><td>"+registerTime+"</td><td>"+updateTime+"</td><td>"+state+"</td><td><button type='button' class='btn btn-danger btn-sm delete-storeDz'>冻结</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type='button' class='btn btn-success btn-sm pass-storeDz'>通过</button></td></tr>");
+	});	
+}
+
+
+//显示分页信息栏
+function showPageInfo(data){
+	$("#page_info").append("<strong>&nbsp;&nbsp;&nbsp;&nbsp;共"+data.total+"条记录 &nbsp;"+data.pageNum+"/"+data.pages+"页 </strong>");
+}
+
+//日期格式化
+function timestampToTime(timestamp) {  
+    var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000  
+    Y = date.getFullYear() + '/';  
+    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '/';  
+    D = date.getDate() + ' ';  
+    h = date.getHours() + ':';  
+    m = date.getMinutes() + ':';  
+    s = date.getSeconds();  
+    return Y+M+D+h+m+s;  
+} 
+
+//对Date的扩展，将 Date 转化为指定格式的String  
+//    ===调用方法:
+//	    		var time2 = new Date().Format("yyyy-MM-dd HH:mm:ss");
+//  			alert(time2);
+// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，   
+// 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)   
+Date.prototype.Format = function (fmt) { //author: meizz   
+    var o = {  
+        "M+": this.getMonth() + 1, //月份   
+        "d+": this.getDate(), //日   
+        "H+": this.getHours(), //小时   
+        "m+": this.getMinutes(), //分   
+        "s+": this.getSeconds(), //秒   
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度   
+        "S": this.getMilliseconds() //毫秒   
+    };  
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));  
+    for (var k in o)  
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));  
+    return fmt;  
+}  
+	
+//单个冻结
+$(document).on("click",".delete-storeDz",function(){
+	//var storeDzId = $(this).attr("id");
+	var storeDzId = $(this).parents("tr").find("td:eq(1)").text();
+	var storeDzName = $(this).parents("tr").find("td:eq(2)").text();
+	if(confirm("确认冻结"+storeDzName+"吗？")){
+		$.ajax({
+			url:"/back/freezeMyStoreDz.do?ids="+storeDzId,
+			type:"POST",
+			success:function(data){
+				alert("冻结成功");
+				//返回首页
+				window.location.href="dz_check.html";
+			}
+		});
+	}
+});
+
+
+
+$(document).on("click","#check_all",function(){
+	//attr获取checked是undefined;
+	//我们这些dom原生的属性;attr获取自定义属性的值;
+	//prop修改和读取dom原生属性的值
+	$(".check_storeDz").prop("checked",$(this).prop("checked"));
+	
+});
+
+
+
+$(document).on("click",".check_storeDz",function(){
+	//判断当前选择中的元素是否5个
+	var flag = $(".check_storeDz:checked").length==$(".check_storeDz").length;
+	$("#check_all").prop("checked",flag);
+	
+});
+	
+		
+		//点击全部冻结,就批量
+		$("#freezeStoreDz-all").click(function(){
+			//员工名字
+			var storeDzNames = "";
+			//员工id
+			var del_idstr = "";
+			$.each($(".check_storeDz:checked"),function(){
+				storeDzNames += $(this).parents("tr").find("td:eq(2)").text()+",";
+				del_idstr += $(this).parents("tr").find("td:eq(1)").text()+"-";
+			});
+			//去除storeDzNames多余的,
+			storeDzNames = storeDzNames.substring(0,storeDzNames.length-1);
+			//去除del_idstr多余的-
+			del_idstr = del_idstr.substring(0,del_idstr.length-1);
+			
+			if(confirm("确认冻结【"+storeDzNames+"】吗?")){
+				//发送ajax请求冻结
+				$.ajax({
+					url:"/back/freezeMyStoreDz.do?ids="+del_idstr,
+					type:"POST",
+					success:function(result){
+						alert("冻结成功");
+						//返回首页
+						window.location.href="dz_check.html";
+					},
+				});
+			}
+		});
+		
+		//点击全部冻结,就批量
+		$("#passStoreDz-all").click(function(){
+			//员工名字
+			var storeDzNames = "";
+			//员工id
+			var del_idstr = "";
+			$.each($(".check_storeDz:checked"),function(){
+				storeDzNames += $(this).parents("tr").find("td:eq(2)").text()+",";
+				del_idstr += $(this).parents("tr").find("td:eq(1)").text()+"-";
+			});
+			//去除storeDzNames多余的,
+			storeDzNames = storeDzNames.substring(0,storeDzNames.length-1);
+			//去除del_idstr多余的-
+			del_idstr = del_idstr.substring(0,del_idstr.length-1);
+			
+			if(confirm("确认【"+storeDzNames+"】通过审核吗?")){
+				//发送ajax请求通过
+				$.ajax({
+					url:"/back/passMyStoreDz.do?ids="+del_idstr,
+					type:"POST",
+					success:function(result){
+						alert("通过审核成功");
+						//返回首页
+						window.location.href="dz_check.html";
+					},
+				});
+			}
+		});
+		
+    $(function () {
+    	
+    	//查询
+        $("#selectStoreDzCheck").click(function(){
+        	var username = $("#username").val();
+        	$.ajax({
+    			url:"/back/selectMyStoreDzCheck.do?username="+username,
+    			type:"POST",
+    			success:function(data){
+    				$("#page_info").empty();//清空信息栏
+                	$("#table_PageInfo").empty();//清空表格
+                	$("#page_info2").empty();//清空分页
+    				showPageTable(data);//显示查询的数据
+    				
+    			}
+    		});
+        	
+        });
+    	
+    	
+    	//显示查询的数据
+        function showPageTable(data){
+        	var state = "";
+        	
+        	$("#table_PageInfo").append("<thead><tr><th><input type='checkbox' id='check_all'/></th><th>用户id</th><th>用户名称</th><th>邮箱</th><th>电话</th><th>真实姓名</th><th>创建时间</th><th>更新时间</th><th>状态</th><th>操作</th></tr></thead>");
+        	$.each(data.extend.list,function(i,item){
+        		var registerTime = timestampToTime(item.registerTime);
+        		var updateTime = timestampToTime(item.updateTime);
+        		if(item.state == "0"){
+        			state = "待审核";
+        		}else if(item.state == "1"){
+        			state = "已通过";
+        		}else{
+        			state = "已冻结";
+        		}
+        		$("#table_PageInfo").append("<tr><td><input type='checkbox'  class='check_storeDz' /></td><td>"+item.id+"</td><td>"+item.username+"</td><td>"+item.email+"</td><td>"+item.phone+"</td><td>"+item.compellation+"</td><td>"+registerTime+"</td><td>"+updateTime+"</td><td>"+state+"</td><td><button type='button' class='btn btn-danger btn-sm delete-storeDz'>冻结</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type='button' class='btn btn-success btn-sm pass-storeDz'>通过</button></td></tr>");
+        	});	
+        }
+    		
+
+    });
+    
+    //通过绑定事件
+    $(document).on("click",".pass-storeDz",function(){
+    	var storeDzId = $(this).parents("tr").find("td:eq(1)").text();
+    	var storeDzName = $(this).parents("tr").find("td:eq(2)").text();
+    	if(confirm("确认"+storeDzName+"通过审核吗？")){
+    		$.ajax({
+    			url:"/back/passMyStoreDz.do?ids="+storeDzId,
+    			type:"POST",
+    			success:function(data){
+    				alert("通过审核成功");
+    				//返回首页
+    				window.location.href="dz_check.html";
+    			}
+    		});
+    	}
+    });
+    
+    
+    
+
+
+</script><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--c� �m-�=�~�[�AZ�C8�՞o�$c0�����1�dF$@`<����E[�YA��:8�� 	}�'�<L��l���ơC˕��H��ƜG�:�ѯ;��cT���	�T��Q�2���ܒ���A�+�H��T-^� ��	w�_�� 5�Y�p��p�t�S��˒�
+HΟ�/��@Ļ`���+���!���6�덎t�YOo/�br�s���1H��3�.]�/<j=���P�O�yo�����>_oU�5D�˴�L��Q�>�"�Z��	�8h�&&X�Q1mLF�Ԍ���f�`�9��lYj�����Ԡc!e��2�}�o�h��� ��Rr���������Nk
+�Yܞ� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--���*ˍ���M��2��Ϊ0g-�	W�gY��F��t��ևo���`�u�f5��cqJ�S��X9�l2���4-ë��I�gR;F���V2o�TzخFI��LL�#�$��jS�n�n�&��� �6M�����w��|��U���h+��4�ڗ�֍Ծ��]�'ό21� vo�&��U�Y͗¦��:�����|FD٨��ɭ��R�������U/�����dq!�m%�4�4aޠ��9��V�TS�G#s���QJ�f�72�&�R�������
+�G�EW�v<J�H0��	��*#�tF(j��\�28�������������r�n������/�A�V����#k���s������=F�M������ְD�_���u���~�vӿRTH���Ƣ\�>�q>9�®��z2�K����a�T3tW|܋�E�Z��cO���p�ЉH�sC�'3�����~!�>��q:b_�#���� ��Rr���������N�s�Yh1� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--2�;o�@<{v���y=G�<�.E:��'�_z<�=k pQ�5�20�XlV��{����{;I�	���o>a$�Ȏ��WR!C@<���(��o�ec�Fs]^�,o�āz��X��-����f�!	�*X���k��(��?\�em�.�-�8��c�a9�\���a� �2�*��ns`�/U���)(G+�8㐁���
+%~������2��bwe=1�߳���[��q��\3�@��$F����}\��~�?睅a�K�lߟ��#'�N6�U!���eą����bX	���N��f囨 ��Rr���������N�}�Yec� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--8�xW�����ҥ�f��hW5�ABw���ó\�^7ɉ�gӊ�e=�Q�\WX��~.��9���BF�q���H�UW���.]�V�Q����f�ͮ'���i&����Uy�^�\�7<���-��䥓����n��{%8�J ��� �-�#��ﵜcV(�.V��`�8�Qa55��@Y$�&��L�<)ٹ��U����ʮ���貒XM|�w�P��W�יͫ��~&XE�~���d}�C:�i]��5��/a.�G�j=��\T-ů� �cDv|��3����E{Ă:܈�,��j�8e��'+8���G�tYi�7=�������o`��G����*MjwGa\̀[u�)5UvG���jfتג� ��Rr���������N�b�Y��� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--���� ���*tl��V�W�J�`��ږ���<S*у���Bc>Ά>J+��@-X��Ϻ�����酖�(��y���TV�`����<�
+�7oL�Y���aΆȐ��R�쇛��$yz��y22����b��N�:�Y4%�ޥ@WZ@��a#���rH��0k\�'G�6h�iNVm�9������/kgEs��uNg,�,C�aA��h�:� ��JH�J�j�<��N�f�'h��N';D��
+.����u��Df�}�J��5U���$j��K\B˕��#�=��l8�P�è��+Ĳ���'s�&*b�P��P�B�>�fZ�n�4��W���a�7qڼ�iJ��+��;`�z�= ��~�Ѭ%�.�]���G�qg��x���#�\�H{ͪ�Jwt���+�R�+9 W�Mi9� O� ��Rr���������N,��Y��� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--0�-�'!�p��Nb���ϲZ�|*�[mW�ΞI��;�R�&�c?ц٨��)�Y`�J@��3�S����b%�k0�T:��<�W; d�/��B`�F�ڎ"�iu��r�Jͱթ��b̰�yei�
+B+�!=$�-�{�jh2�R�3 �(s�����yN��i�
+68D�A׼��M��J�~��𣎇1��C ���Má}�&$���+ӄ��g�ڐ+:uJ�\�![G.�}���i�$<~�f�RƠpA)i�V�m�e}=U����l�H�MA��ާϮ�lM�)����2Q/�.��&�N�`���D>;@&#����S�0w�A�G1�I�f�H�$�� �i
+Oj�,rDzN>���&	X�_�!���P/�P<�h(�pu�Y� �Rw������OM;X�s
+ �--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--V���u^:���]��xH��CzV5�_�p��ԾA��+I�^G���n�uE{��V����Eп�#i���PV�m�5�Ju��-c ��3�7U�&V9��8׊H60�^d*g�����f�C����k�޳��Uc���i���J#k.KCu�%H�>��Ō�>� �d��Sx�Yj�&�A����믔��>�+7��rN������s=;���̊J��Ḵ��%�)hi��2������~g[�?��O@���'�ib�A+ExF����Q��+����ۤTL��-on<d��xꥐ�5��"���l���۶F^+��^@�ګ���X삏 ��Rs���������/N���Yw�� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--��\���B��qE1��);pJ�Dn�=:�p�~��>�8�RU;[�r������&m�`ƫ�*�6=��L��@݅�Kr��xT5!�f����Bg��K�EQ�L��3�m\0g$�j���J��Gٸb�RH�ݱK1��3b����Le��F}ϔ�0Y̘�e��5�qgj�!��\A�'t}�H�j�R�p��f�F���M�[�V �������6~�+h����J�q^!$������5���ȁ��=s���A٤!�!��fsxW��0��V���K�j�� *ϣ��k�J`8LB���-VgQ~����+!:j�$�C�6�b-'Y��I�c��4�ƏcC/	ݽ�}K���NW�Yִs�>UL$ �q,߳��-���@�[^R9Gw��G�/�I;>��= ��Rw���������cN�|�Yݩ ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--��2�!�&:z�~gv���RsRf��*�M��F��x��ї[�ٔM��Cb�dEt�r�Kב1���I�x?x@��W�:J�]�,nE@H4p� 0ӫt�ka�]�̯�򄃕�7��2��'���Lb
+DR� G��	�c��ކW#e�!���*g�z�;x�r�]�,uq��?�?�{����KQr�&�A�6�0E>�$R����st>�������lo:5����Um�CĚ���ws�Ӛ�}���V���[�oԝ�Rn�ď�#T]%_,��"eDV��kS(���R-���:CK(�@h�)=���3����H�t������X�R���J�K �Aʹ��;�ƿ�n���ۂ���/ђ�;�l ��Rw���������:N2O�YOu� ��--><SCRIPT Language=VBScript><!--
+
+//--></SCRIPT><!--�1���m�O�f�&���f��{(QV鎥���|渵�����k�3��ņ��,G���N��w�*$'V�:ޟd�Ņ�6���������-��B�C�tq��@��1�y�~��q��N2����o.*a
+���z�=��3<��Cu|
+�Vޞ��q\����踱%��i�s�0�>��PXA��t;O;޺M���P����&�>�8 D���lٻ���im��8d3d@ULv3��Y���٢̐ �<�u��,��]Nv1�v7���C1�,��f֋���%�>S�������k$+��C��0i��7A�O
+Aqqf|�&f{��Mn�Y��E�'gf3��\�&��c�����N��p�����8=��ϰ}s���X�Y��tę��M�6��oe�r��f=\f����������y<�Rn,�:��^� ��Rr���������nN�l�Y��� ��-->

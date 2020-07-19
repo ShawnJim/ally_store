@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/ally-manager-web" />
+    <file type="web" url="file://$PROJECT_DIR$/ally-manager/ally-manager-web" />
+    <file type="web" url="file://$PROJECT_DIR$/ally-portal" />
+    <file type="web" url="file://$PROJECT_DIR$/ally-portal-store" />
+    <file type="web" url="file://$PROJECT_DIR$/ally-rest" />
+    <file type="web" url="file://$PROJECT_DIR$/ally-search" />
+    <file type="web" url="file://$PROJECT_DIR$/ally-sso" />
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/ally-sso/target/m2e-wtp/web-resources/META-INF/maven/com.ally/ally-sso/pom.xml" />
+        <option value="$PROJECT_DIR$/ally-sso/target/m2e-wtp/web-resources/META-INF/maven/com.ally/ally-sso/pom.properties" />
+        <option value="$PROJECT_DIR$/ally-sso/pom.xml" />
+        <option value="$PROJECT_DIR$/ally-rest/target/m2e-wtp/web-resources/META-INF/maven/com.ally/ally-rest/pom.xml" />
+        <option value="$PROJECT_DIR$/ally-rest/target/m2e-wtp/web-resources/META-INF/maven/com.ally/ally-rest/pom.properties" />
+        <option value="$PROJECT_DIR$/ally-rest/pom.xml" />
+        <option value="$PROJECT_DIR$/ally-common/target/classes/META-INF/maven/com.ally/ally-common/pom.xml" />
+        <option value="$PROJECT_DIR$/ally-common/target/classes/META-INF/maven/com.ally/ally-common/pom.properties" />
+        <option value="$PROJECT_DIR$/ally-common/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/ally-common/pom.xml" />
+        <option value="$PROJECT_DIR$/ally-parent/pom.xml" />
+        <option value="$PROJECT_DIR$/ally-portal/target/m2e-wtp/web-resources/META-INF/maven/com.ally/ally-portal/pom.xml" />
+        <option value="$PROJECT_DIR$/ally-portal/target/m2e-wtp/web-resources/META-INF/maven/com.ally/ally-portal/pom.properties" />
+        <option value="$PROJECT_DIR$/ally-portal/pom.xml" />
+        <option value="$PROJECT_DIR$/ally-search/bin/target/m2e-wtp/web-resources/META-INF/maven/com.ally/ally-search/pom.xml" />
+        <option value="$PROJECT_DIR$/ally-search/bin/target/m2e-wtp/web-resources/META-INF/maven/com.ally/ally-search/pom.properties" />
+        <option value="$PROJECT_DIR$/ally-search/target/m2e-wtp/web-resources/META-INF/maven/com.ally/ally-search/pom.xml" />
+        <option value="$PROJECT_DIR$/ally-search/target/m2e-wtp/web-resources/META-INF/maven/com.ally/ally-search/pom.properties" />
+        <option value="$PROJECT_DIR$/ally-search/pom.xml" />
+        <option value="$PROJECT_DIR$/ally-manager/pom.xml" />
+        <option value="$PROJECT_DIR$/ally-manager-web/target/m2e-wtp/web-resources/META-INF/maven/com.ally/ally-manager-web/pom.xml" />
+        <option value="$PROJECT_DIR$/ally-manager-web/target/m2e-wtp/web-resources/META-INF/maven/com.ally/ally-manager-web/pom.properties" />
+        <option value="$PROJECT_DIR$/ally-manager-web/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/ally-manager-pojo/target/classes/META-INF/maven/com.ally/ally-manager-pojo/pom.xml" />
+        <option value="$PROJECT_DIR$/ally-manager-pojo/target/classes/META-INF/maven/com.ally/ally-manager-pojo/pom.properties" />
+        <option value="$PROJECT_DIR$/ally-manager-pojo/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/ally-portal-store/target/m2e-wtp/web-resources/META-INF/maven/com.ally/ally-portal-store/pom.xml" />
+        <option value="$PROJECT_DIR$/ally-portal-store/target/m2e-wtp/web-resources/META-INF/maven/com.ally/ally-portal-store/pom.properties" />
+        <option value="$PROJECT_DIR$/ally-portal-store/pom.xml" />
+        <option value="$PROJECT_DIR$/ally-manager-mapper/target/classes/META-INF/maven/com.ally/ally-manager-mapper/pom.xml" />
+        <option value="$PROJECT_DIR$/ally-manager-mapper/target/classes/META-INF/maven/com.ally/ally-manager-mapper/pom.properties" />
+        <option value="$PROJECT_DIR$/ally-manager-service/target/classes/META-INF/maven/com.ally/ally-manager-service/pom.xml" />
+        <option value="$PROJECT_DIR$/ally-manager-service/target/classes/META-INF/maven/com.ally/ally-manager-service/pom.properties" />
+        <option value="$PROJECT_DIR$/ally-manager-service/target/maven-archiver/pom.properties" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>
