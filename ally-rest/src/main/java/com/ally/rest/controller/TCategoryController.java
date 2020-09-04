@@ -15,7 +15,7 @@ import com.ally.rest.po.TCategory;
 import com.ally.rest.service.TCategoryService;
 
 /**
- * ·ÖÀàÊı¾İ¿ØÖÆ²ã
+ * åˆ†ç±»æ•°æ®æ§åˆ¶å±‚
  * @author Administrator
  *
  */
@@ -27,8 +27,8 @@ public class TCategoryController {
 
 	
 	/**
-	 * »ñÈ¡Ò»¼¶·ÖÀàÁĞ±íÊı¾İ£¬ÒÔjson¸ñÊ½·µ»Ø
-	 * @param callback
+	 * è·å–ä¸€çº§åˆ†ç±»åˆ—è¡¨æ•°æ®ï¼Œä»¥jsonæ ¼å¼è¿”å›
+	 * @param callbsy
 	 * @return
 	 */
 	@RequestMapping("/itemcat/list")
@@ -41,7 +41,7 @@ public class TCategoryController {
 	}
 	
 	/**
-	 * »ñÈ¡¶ş¼¶·ÖÀàÁĞ±íÊı¾İ£¬ÒÔjson¸ñÊ½·µ»Ø
+	 * è·å–äºŒçº§åˆ†ç±»åˆ—è¡¨æ•°æ®ï¼Œä»¥jsonæ ¼å¼è¿”å›
 	 * @param callback
 	 * @return
 	 */
@@ -51,12 +51,13 @@ public class TCategoryController {
 		CateResult catResult = categoryService.getItemFCatList();
 		MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(catResult);
 		mappingJacksonValue.setJsonpFunction(callback);
+		System.error.out("12121");
 		return mappingJacksonValue;
 	}
 	
 	
 	/**
-	 * ¸ù¾İ¸¸id»ñÈ¡·ÖÀàÊı¾İ
+	 * æ ¹æ®çˆ¶idè·å–åˆ†ç±»æ•°æ®
 	 * @param callback
 	 * @param parentId
 	 * @return
@@ -71,7 +72,7 @@ public class TCategoryController {
 	}
 	
 	/**
-	 * ¸ù¾İidÖ÷¼ü»ñÈ¡Êı¾İ
+	 * æ ¹æ®idä¸»é”®è·å–æ•°æ®
 	 * @param id
 	 * @param response
 	 * @return
@@ -79,7 +80,7 @@ public class TCategoryController {
 	@RequestMapping("/getCate/{id}")
 	@ResponseBody
 	public Msg getCategory(@PathVariable("id")Integer id,HttpServletResponse response) {
-		//ÉèÖÃ¿çÓò
+		//è®¾ç½®è·¨åŸŸ
 		allowCrossDomain(response);
 		try {
 			TCategory category = categoryService.getCategory(id);
@@ -92,7 +93,7 @@ public class TCategoryController {
 	}
 	
 	public void allowCrossDomain(HttpServletResponse response) {
-		//ÉèÖÃ»Ø´«±àÂë,²¢ÇÒÔÊĞí¿çÓò
+		//è®¾ç½®å›ä¼ ç¼–ç ,å¹¶ä¸”å…è®¸è·¨åŸŸ
 		response.addHeader("Access-Control-Allow-Origin", "*");
 		response.setCharacterEncoding("utf-8");
 	}
